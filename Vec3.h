@@ -59,7 +59,7 @@ public:
 	{
 		e[0] += v2.x();
 		e[1] += v2.y();
-		e[2] += v2.x();
+		e[2] += v2.z();
 		return *this;
 	}
 
