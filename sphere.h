@@ -7,7 +7,7 @@ class sphere : public Hitable
 {
 public:
 	sphere() {};
-	sphere(const vec3& cen, const float r) : center(cen), radius(r) {};
+	sphere(const vec3& cen, const float r, Material* mPtr = nullptr) : center(cen), radius(r), matPtr(mPtr) {};
 	virtual bool hit(const Ray& r, float t_min, float t_max, Hit_record& rec) const override;
 
 private:

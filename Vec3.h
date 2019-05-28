@@ -33,9 +33,9 @@ public:
 
 		return vec3(this->e[0] - v2.x(), this->e[1] - v2.y(), this->e[2] - v2.z());
 	}
-	inline float operator* (const vec3& v2) const
+	inline vec3 operator* (const vec3& v2) const
 	{
-		return this->e[0] * v2.x(), this->e[1] * v2.y(), this->e[2] * v2.z();
+		return vec3(this->e[0] * v2.x(), this->e[1] * v2.y(), this->e[2] * v2.z());
 	}
 	inline vec3 operator/ (const vec3& v2) const
 	{
@@ -120,6 +120,15 @@ public:
 	}
 
 };
+
+
+inline vec3 makeUnitVector(const vec3&  vec)
+{
+	vec3  retVec = vec;
+	retVec.makeUnitVector();
+	return retVec;
+}
+
 
 inline float dot(const vec3& v1, const vec3& v2)
 {
