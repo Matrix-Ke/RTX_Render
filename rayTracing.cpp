@@ -60,7 +60,7 @@ int main()
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 	camera    renderCamera;
 
-
+	
 
 
 	Hitable *list[4];
@@ -94,7 +94,6 @@ int main()
 			outImage << ir << " " << ig << " " << ib << "\n";
 		}
 	}
-
-	cout << "over" << endl;
+	cout << "over finished" << endl;
 	return 0;
 }
