@@ -74,10 +74,6 @@ int main()
 
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 	camera    renderCamera;
-
-	
-
-
 	Hitable *list[4];
 	// 球1,2,3,4
 	list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.8, 0.3, 0.3)));
@@ -109,7 +105,6 @@ int main()
 			outImage << ir << " " << ig << " " << ib << "\n";
 		}
 	}
-
 	cout << "over" << endl;
 	return 0;
 }
