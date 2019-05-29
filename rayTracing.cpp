@@ -105,6 +105,6 @@ int main()
 			outImage << ir << " " << ig << " " << ib << "\n";
 		}
 	}
-	cout << "over" << endl;
+	cout << "over finished" << endl;
 	return 0;
 }
