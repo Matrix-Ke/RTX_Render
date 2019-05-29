@@ -12,29 +12,16 @@
 #define  RecursionDepth	10
 #define	samplePixel	100;
 #define random(a, b)   (rand()%(b - a +1 ) +a )
-#define randomNum	(float((rand()%100)) /100.0f)
+//#define randomNum	(float((rand()%100)) /100.0f)
 //#define randomNum (float((rand()%(100)))/100.0f)
 using namespace std;
-
-
-
-
-//vec3 randomPointInUintsphere()
-//{
-//	vec3  point;
-//	do
-//	{
-//		point = 2.0 * vec3(randomNum, randomNum, randomNum) - vec3(1, 1, 1);
-//	} while ( dot(point, point) >= 1.0);
-//	return point;
-//}
 
 
 vec3 color(const Ray& r, Hitable* world, int depth)
 {
 	Hit_record  rec;
 
-	if (world->hit(r, 0, FLT_MAX, rec ))
+	if (world->hit(r, 0, FLT_MAX, rec))
 	{
 		Ray scattered;
 		vec3 attenuation;
@@ -46,8 +33,6 @@ vec3 color(const Ray& r, Hitable* world, int depth)
 		{
 			return vec3(0.0, 0.0, 0.0);
 		}
-		//vec3   diffuseDir = rec.normal + randomPointInUintsphere();
-		//return 0.5 * color(Ray(rec.p, diffuseDir), world, depth +1);
 	}
 	else
 	{
@@ -75,7 +60,7 @@ int main()
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 	camera    renderCamera;
 
-	
+
 
 
 	Hitable *list[4];
@@ -84,11 +69,11 @@ int main()
 	list[1] = new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
 	list[2] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 1));
 	list[3] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.8, 0.8, 0.8), 1));
-	 
+
 	Hitable *world = new HitableList(list, 4);
 
-	for (int j = ny -1 ; j >= 0 ; j--)
-	{   
+	for (int j = ny - 1; j >= 0; j--)
+	{
 		for (int i = 0; i < nx; i++)
 		{
 			vec3   pixelColor(0.0, 0.0, 0.0);

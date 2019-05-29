@@ -3,9 +3,10 @@
 #include <fstream>
 #include "ray.h"
 #include "hitable.h"
+#include "drand48.h"
 
-#define random(rAlbedo, b)   (rand()%(b - rAlbedo +1 ) +rAlbedo )
-#define randomNum	(float((rand()%100)) /100.0f)
+//#define random(rAlbedo, b)   (rand()%(b - rAlbedo +1 ) +rAlbedo )
+//#define drand48()	(float((rand()%100)) /100.0f)
 
 
 
@@ -21,7 +22,7 @@ vec3 randomPointInUintsphere()
 	vec3  point;
 	do
 	{
-		point = 2.0 * vec3(randomNum, randomNum, randomNum) - vec3(1, 1, 1);
+		point = 2.0 * vec3(drand48(), drand48(), drand48()) - vec3(1, 1, 1);
 	} while (dot(point, point) >= 1.0);
 	return point;
 }
