@@ -102,6 +102,7 @@ bool refract(const vec3& rayIn, const vec3& normal, float rayRatio, vec3& refrac
 	float discrimant = 1.0 - rayRatio * rayRatio *(1 -dt * dt);
 	if(discrimant  > 0) 
 	{
+		//折射光线
 		refracted = rayRatio*(unitRay - normal * dt) - normal*sqrt(discrimant);
 		return true;
 	}
@@ -110,18 +111,19 @@ bool refract(const vec3& rayIn, const vec3& normal, float rayRatio, vec3& refrac
 }
 
 
-class Dielectric :public Material
+class dielectric :public Material
 {
 private:
 	float refractIndex;
 	public:
-	Dielectric(float refIdx = 1.0f): refractIndex(refIdx) {};
+	dielectric(float refIdx = 1.0f): refractIndex(refIdx) {};
 	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const override
 	{
 		vec3	outWardNormal;
-		vec3	reflected = reflect(rayIn.direction, rec.normal);
+		vec3	reflected = reflect(rayIn.direction(), rec.normal);
 		float	rayRatio;
 		attenuation = vec3(1.0, 1.0, 1.0);
+		vec3	refracted;
 		float reflectProb ;
 		float cosine;
 		if (dot( rayIn.direction(), rec.normal ) > 0)
@@ -138,25 +140,28 @@ private:
 			cosine = -dot(rayIn.direction(), rec.normal) / rayIn.direction().length();
 		}
 
-		if(refract( rayIn.direction(), outWardNormal, rayRatio, reflected))
+		if(refract( rayIn.direction(), outWardNormal, rayRatio, refracted))
+		{
 			reflectProb = schlick(cosine, refractIndex);
+			 scattered = Ray(rec.p, reflected);		
+		}
 		else
+		{
 			reflectProb = 1.0;
+			 scattered = Ray(rec.p, refracted);
+		}
+			
 
-		if ( drand48() < reflectProb )
-		{
-			scattered = Ray(rec.p, reflected);
-		}
-		else
-		{
-			scattered = Ray(rec.p, reflected);
-		}
+		//if ( drand48() < reflectProb )
+		//{
+		//	scattered = Ray(rec.p, reflected);
+		//}
+		//else
+		//{
+		//	scattered = Ray(rec.p, refracted);
+		//}
 		
 		return true;
 	}
 
-}
-
-
-
-
+};
