@@ -17,22 +17,42 @@
 using namespace std;
 
 
+//vec3 color(const Ray& r, Hitable* world, int depth)
+//{
+//	Hit_record  rec;
+//
+//	if (world->hit(r, 0, FLT_MAX, rec))
+//	{
+//		Ray scattered;
+//		vec3 attenuation;
+//		if (depth < RecursionDepth && rec.matPtr->scatter(r, rec, attenuation, scattered))
+//		{
+//			return attenuation * color(scattered, world, depth + 1);
+//		}
+//		else
+//		{
+//			return vec3(0.0, 0.0, 0.0);
+//		}
+//	}
+//	else
+//	{
+//		vec3 unitDir = r.direction();
+//		unitDir.makeUnitVector();
+//		float t = 0.5 * (unitDir.y() + 1.0);
+//		return vec3(1.0, 1.0, 1.0)*(1.0 - t) + vec3(0.5, 0.7, 1.0) * t;
+//	}
+//}
+
+
 vec3 color(const Ray& r, Hitable* world, int depth)
 {
 	Hit_record  rec;
 
 	if (world->hit(r, 0, FLT_MAX, rec))
 	{
-		Ray scattered;
-		vec3 attenuation;
-		if (depth < RecursionDepth && rec.matPtr->scatter(r, rec, attenuation, scattered))
-		{
-			return attenuation * color(scattered, world, depth + 1);
-		}
-		else
-		{
-			return vec3(0.0, 0.0, 0.0);
-		}
+		vec3   diffuseDir = rec.normal + randomPointInUintsphere();
+
+		return 0.5 * color(Ray(rec.p, diffuseDir), world, depth);
 	}
 	else
 	{
@@ -45,10 +65,9 @@ vec3 color(const Ray& r, Hitable* world, int depth)
 
 
 
-
 int main()
 {
-	ofstream   outImage("./Image/picture_1.ppm", ios::out);
+	ofstream   outImage("./Image/picture_2.ppm", ios::out);
 	if (!outImage)
 	{
 		cout << "open file error" << endl;

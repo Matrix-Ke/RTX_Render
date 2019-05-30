@@ -67,6 +67,7 @@ public:
 			fuzz = f;
 		else
 			fuzz = 1.0f;
+		std::cout << fuzz << std::endl;
 	};
 	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const override
 	{
