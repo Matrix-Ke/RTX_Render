@@ -111,6 +111,8 @@ bool refract(const vec3& rayIn, const vec3& normal, float rayRatio, vec3& refrac
 }
 
 
+
+
 class dielectric :public Material
 {
 private:
@@ -143,25 +145,26 @@ private:
 		if(refract( rayIn.direction(), outWardNormal, rayRatio, refracted))
 		{
 			reflectProb = schlick(cosine, refractIndex);
-			 scattered = Ray(rec.p, reflected);		
+			 //scattered = Ray(rec.p, refracted);
 		}
 		else
 		{
 			reflectProb = 1.0;
-			 scattered = Ray(rec.p, refracted);
+			 //scattered = Ray(rec.p, reflected);
 		}
 			
 
-		//if ( drand48() < reflectProb )
-		//{
-		//	scattered = Ray(rec.p, reflected);
-		//}
-		//else
-		//{
-		//	scattered = Ray(rec.p, refracted);
-		//}
+		if ( drand48() < reflectProb )
+		{
+			scattered = Ray(rec.p, reflected);
+		}
+		else
+		{
+			scattered = Ray(rec.p, refracted);
+		}
 		
 		return true;
 	}
-
 };
+
+
