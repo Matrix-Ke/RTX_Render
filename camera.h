@@ -10,31 +10,45 @@ private:
 	vec3    origin;
 	vec3	horizontal;
 	vec3	vertical;
-	vec3	lower_left_corner;
+	vec3	lowerLeftCorner;
 
+	vec3	cameraX, cameraY, cameraDir;
+	float   cameraAperture;
 public:
 
-	camera(const vec3& lookfrom, const vec3& lookat, const vec3 vUp, const float vFov, float aspect)
+	camera(const vec3& lookfrom, const vec3& lookat, const vec3 vUp, const float vFov, float aspectRatio, float aperture, float focusDist )
 	{
-		vec3 u, v, w;
-		float theta = vFov * M_PI / 180;
-		float half_height = tan(theta / 2);
-		float half_width = aspect * half_height;
+		cameraAperture = aperture;
 		origin = lookfrom;
 
-		w = makeUnitVector(lookfrom - lookat);
-		u = makeUnitVector(cross(vUp, w));
-		v = cross(w, u);
+		float theta = vFov * M_PI / 180;
+		float halfHeigh = tan(theta / 2);
+		float halfWidth = aspectRatio * halfHeigh;
+		
+		cameraDir = lookfrom - lookat;
+	    cameraX = cross(vUp, cameraDir);
+	    cameraY = cross(cameraDir, cameraX);
+		cameraDir.makeUnitVector();
+		cameraX.makeUnitVector();
+		cameraY.makeUnitVector();
 
-		//lower_left_corner = vec3(-half_width, -half_height, -1.0);
-		lower_left_corner = origin - half_width * u - half_height * v - w;
-		horizontal = 2 * half_width*u;
-		vertical = 2 * half_height*v;
+		
+		horizontal = 2 * halfWidth * cameraX;
+		vertical = 2 * halfHeigh* cameraY;
+		
+		lowerLeftCorner = lookfrom - halfWidth * cameraX - halfHeigh * cameraY;
+
+
+
 	}
 
+	//   this u & v range from 0.0-1.0f;
 	Ray getRay(float u, float v) const
 	{
-		return Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin);
+		return Ray(origin, lowerLeftCorner + u * horizontal + v * vertical - origin);
 	}
+
+
+
 
 };
