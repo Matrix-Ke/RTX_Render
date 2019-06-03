@@ -56,7 +56,12 @@ int main()
 	int ns = samplePixel;
 
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
-	camera    renderCamera(vec3(-2, 2, 1), vec3(0, 0, -1), vec3(0, 1, 0),45, float(nx) / float(ny));
+
+	vec3 lookfrom(3, 3, 2);
+	vec3 lookat(0, 0, -1);
+	float dist_to_focus = (lookfrom - lookat).length();
+	float aperture = 2.0;
+	camera renderCamera(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny), aperture, dist_to_focus);
 
 	Hitable *list[4];
 	// 球1,2,3,4; 2个lambertian ，2个metal
