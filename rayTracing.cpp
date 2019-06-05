@@ -44,6 +44,84 @@ vec3 color(const Ray& r, Hitable* world, int depth)
 }
 
 
+//Hitable*  randomScene()
+//{
+//	int n = 20;
+//	Hitable ** list = new Hitable*[n + 1];
+//	list[0] = new sphere(vec3(0, -700, 0), 700, new lambertian(vec3(0.5, 0.5, 0.5)));
+//	int i = 1;
+//	for (int i = -3; i < 3; i++)
+//	{
+//		for (int j = -3; j < 3; j++)
+//		{
+//			float  chooseMat = drand48();
+//			vec3   center(i + 0.9 * drand48(), 0.2, j + 0.9 * drand48());
+//
+//			if ( ( center - vec3(4, 0.2, 0)).length() > 0.9 )
+//			{
+//				if (chooseMat < 0.8) // diffuse
+//				{
+//					list[i++] = new MovingSphere(center, center + vec3(0, 0.5* drand48(), 0), 0.0f, 1.0, 0.2, new lambertian(vec3(drand48() * drand48(), drand48()* drand48(), drand48()*drand48())));
+//
+//				}
+//				else if (  chooseMat < 0.95)
+//				{
+//					list[i++] = new sphere(center, 0.2, 
+//						new metal(vec3(0.5 * (1 + drand48()), 0.5 * (1 + drand48()), 0.5 * (1 + drand48())), 0.5 * drand48()));
+//				}
+//				else
+//				{
+//					list[i++] = new sphere(center, 0.2, new dielectric(1.5));
+//				}
+//			}
+//		}
+//	}
+//	list[i++] = new sphere(vec3(0, 1, 0), 1.0, new dielectric(2.5));
+//	list[i++] = new sphere(vec3(-4, 1, 0), 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
+//	list[i++] = new sphere(vec3(4, 1, 0), 1.0, new metal(vec3(1, 1, 1), 0.0));
+//
+//	return new HitableList(list, i);
+//}
+
+
+Hitable*  randomScene()
+{
+	int n = 500;
+	Hitable **list = new Hitable *[n + 1];
+	list[0] = new sphere(vec3(0, -700, 0), 700, new lambertian(vec3(0.5, 0.5, 0.5)));
+	int i = 1;
+	for (int a = -11; a < 11; a++) {
+		for (int b = -11; b < 11; b++) {
+			float choose_mat = drand48();
+			vec3 center(a + 0.9 * drand48(), 0.2, b + 0.9 * drand48());
+			if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
+				if (choose_mat < 0.8) {  // diffuse
+					// 运动模糊的小球
+					list[i++] = new MovingSphere(center, center + vec3(0, 0.5 * drand48(), 0), 0.0, 1.0, 0.2,
+						new lambertian(vec3(drand48() * drand48(), drand48() * drand48(),
+							drand48() * drand48())));
+				}
+				else if (choose_mat < 0.95) { // metal
+					list[i++] = new sphere(center, 0.2,
+						new metal(vec3(0.5 * (1 + drand48()), 0.5 * (1 + drand48()),
+							0.5 * (1 + drand48())), 0.5 * drand48()));
+				}
+				else {  // glass
+					list[i++] = new sphere(center, 0.2, new dielectric(1.5));
+				}
+			}
+		}
+	}
+
+	list[i++] = new sphere(vec3(0, 1, 0), 1.0, new dielectric(2.5));
+	list[i++] = new sphere(vec3(-4, 1, 0), 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
+	list[i++] = new sphere(vec3(4, 1, 0), 1.0, new metal(vec3(1, 1, 1), 0.0));
+
+	return new HitableList(list, i);
+}
+
+
+
 int main()
 {
 	ofstream   outImage("./Image/picture_1.ppm", ios::out);
@@ -57,20 +135,14 @@ int main()
 
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 
-	vec3 lookfrom(3, 3, 2);
-	vec3 lookat(0, 0, -1);
-	float dist_to_focus = (lookfrom - lookat).length();
-	float aperture = 2.0;
-	camera renderCamera(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny), aperture, dist_to_focus);
+	vec3 lookfrom(13, 2, 3);
+	vec3 lookat(0, 0, 0);
+	float dist_to_focus = 10.0;
+	float aperture = 0.1;
+	camera renderCamera(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny), aperture, dist_to_focus, 0.0, 1.0);
 
-	Hitable *list[4];
-	// 球1,2,3,4; 2个lambertian ，2个metal
-	list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.8, 0.3, 0.3)));
-	list[1] = new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-	list[2] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.3));
-	list[3] = new sphere(vec3(-1, 0, -1), 0.5, new dielectric(1.5));
 
-	Hitable *world = new HitableList(list, 4);
+	Hitable *world = randomScene();
 
 	for (int j = ny - 1; j >= 0; j--)
 	{
@@ -94,6 +166,7 @@ int main()
 			outImage << ir << " " << ig << " " << ib << "\n";
 		}
 	}
+	outImage.close();
 	cout << "over finished" << endl;
 	return 0;
 }
