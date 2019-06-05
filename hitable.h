@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ray.h"
+#include "aabb.h"
 
 class Material;
 
@@ -17,6 +18,20 @@ class Hitable
 {
 public:
 	virtual bool hit(const Ray& r, float t_min, float t_max, Hit_record& rec) const = 0;
+
+	//add boundingbox for AABB algorithem
+	virtual bool boundingBox(float t0, float t1, AABB& box)  const = 0;
+
 private:
 
+};
+
+
+class BvhNode : public Hitable
+{
+	BvhNode() {};
+	BvhNode(Hitable** l, int n, float time0, float time1)
+	{
+
+	}
 };

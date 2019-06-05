@@ -5,6 +5,12 @@
 
 class sphere : public Hitable
 {
+private:
+	vec3	center;
+	float	radius;
+	Material*  matPtr;
+	AABB	box;
+
 public:
 	sphere() {};
 	sphere(const vec3& cen, const float r, Material* mPtr = nullptr) : center(cen), radius(r), matPtr(mPtr) {};
@@ -39,25 +45,20 @@ public:
 		}
 		return false;
 	}
+	//  add boudingBox
+	virtual bool boundingBox(float t0, float t1, AABB& box) const override
+	{
+		box = AABB(center - vec3(radius, radius, radius), center + vec3(radius, radius, radius));
+		return true;
+	}
 
-private:
-	vec3	center;
-	float	radius;
-	Material*  matPtr;
+
 };
 
 
 
 class MovingSphere : public Hitable
 {
-private:
-	vec3    _centerPos1;
-	vec3	_centerPos2;
-
-	float  _startTime;
-	float  _endTime;
-	float  _radius;
-	Material*  _matPtr;
 public:
 	MovingSphere() {};
 	MovingSphere(const vec3& cen1, const vec3& cen2, float sTime, float eTime, float R, Material * mat) :
@@ -67,7 +68,6 @@ public:
 	{
 		return _centerPos1 + (time - _startTime) / (_endTime - _startTime) * (_centerPos1 - _centerPos2);
 	}
-
 	virtual bool hit(const Ray& r, float t_min, float t_max, Hit_record& rec) const override
 	{
 		// 修改之前的center为一个时间相关的位置
@@ -96,5 +96,33 @@ public:
 		}
 		return false;
 	}
+	
+	//add boudingBox
+	virtual bool boundingBox(float t0, float t1, AABB& box) const override
+	{
+		AABB box0(center(t0) - vec3(_radius, _radius, _radius), center(t0) + vec3(_radius, _radius, _radius));
+		AABB box1(center(t1) - vec3(_radius, _radius, _radius), center(t1) + vec3(_radius, _radius, _radius));
+		box = surrounding_box(box0, box1);
+		return true;
+	}
 
+private:
+	AABB surrounding_box(AABB &box0, AABB &box1) const 
+	{
+		vec3 small(fmin(box0.min().x(), box1.min().x()),
+			fmin(box0.min().y(), box1.min().y()),
+			fmin(box0.min().z(), box1.min().z()));
+		vec3 big(fmax(box0.max().x(), box1.max().x()),
+			fmax(box0.max().y(), box1.max().y()),
+			fmax(box0.max().z(), box1.max().z()));
+		return AABB(small, big);
+	}
+
+private:
+	vec3    _centerPos1;
+	vec3	_centerPos2;
+	float  _startTime;
+	float  _endTime;
+	float  _radius;
+	Material*  _matPtr;
 };
