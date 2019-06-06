@@ -67,6 +67,7 @@ bool BvhNode::hit(const Ray & r, float tmin, float tmax, Hit_record & rec) const
 		else if (hitRight)
 		{
 			rec = rightRec;
+			return true;
 		}
 		else
 		{
@@ -77,7 +78,6 @@ bool BvhNode::hit(const Ray & r, float tmin, float tmax, Hit_record & rec) const
 	{
 		return false;
 	}
-	return false;
 }
 
 bool BvhNode::boundingBox(float t0, float t1, AABB & box) const

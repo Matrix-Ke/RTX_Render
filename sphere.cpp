@@ -58,7 +58,7 @@ vec3 MovingSphere::center(const float time) const
 
 bool MovingSphere::hit(const Ray & r, float t_min, float t_max, Hit_record & rec) const
 {
-	// �޸�֮ǰ��centerΪһ��ʱ����ص�λ��
+	// 
 	vec3 oc = r.origin() - center(r.time());
 	float a = dot(r.direction(), r.direction());
 	float b = dot(oc, r.direction());
