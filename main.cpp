@@ -7,10 +7,11 @@
 #include "hitableList.h"
 #include "camera.h"
 #include "material.h"
+#include "bvh.h"
 #define ImageWidth  200
 #define ImageLength  100
 #define  RecursionDepth	10
-#define	samplePixel	100;
+#define	samplePixel	4;
 #define random(a, b)   (rand()%(b - a +1 ) +a )
 //#define randomNum	(float((rand()%100)) /100.0f)
 //#define randomNum (float((rand()%(100)))/100.0f)
@@ -44,67 +45,32 @@ vec3 color(const Ray& r, Hitable* world, int depth)
 }
 
 
-//Hitable*  randomScene()
-//{
-//	int n = 20;
-//	Hitable ** list = new Hitable*[n + 1];
-//	list[0] = new sphere(vec3(0, -700, 0), 700, new lambertian(vec3(0.5, 0.5, 0.5)));
-//	int i = 1;
-//	for (int i = -3; i < 3; i++)
-//	{
-//		for (int j = -3; j < 3; j++)
-//		{
-//			float  chooseMat = drand48();
-//			vec3   center(i + 0.9 * drand48(), 0.2, j + 0.9 * drand48());
-//
-//			if ( ( center - vec3(4, 0.2, 0)).length() > 0.9 )
-//			{
-//				if (chooseMat < 0.8) // diffuse
-//				{
-//					list[i++] = new MovingSphere(center, center + vec3(0, 0.5* drand48(), 0), 0.0f, 1.0, 0.2, new lambertian(vec3(drand48() * drand48(), drand48()* drand48(), drand48()*drand48())));
-//
-//				}
-//				else if (  chooseMat < 0.95)
-//				{
-//					list[i++] = new sphere(center, 0.2, 
-//						new metal(vec3(0.5 * (1 + drand48()), 0.5 * (1 + drand48()), 0.5 * (1 + drand48())), 0.5 * drand48()));
-//				}
-//				else
-//				{
-//					list[i++] = new sphere(center, 0.2, new dielectric(1.5));
-//				}
-//			}
-//		}
-//	}
-//	list[i++] = new sphere(vec3(0, 1, 0), 1.0, new dielectric(2.5));
-//	list[i++] = new sphere(vec3(-4, 1, 0), 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
-//	list[i++] = new sphere(vec3(4, 1, 0), 1.0, new metal(vec3(1, 1, 1), 0.0));
-//
-//	return new HitableList(list, i);
-//}
 
-
-Hitable*  randomScene()
+//
+HitableList*  randomScene()
 {
-	int n = 500;
+	int n = 50;
 	Hitable **list = new Hitable *[n + 1];
 	list[0] = new sphere(vec3(0, -700, 0), 700, new lambertian(vec3(0.5, 0.5, 0.5)));
 	int i = 1;
-	for (int a = -11; a < 11; a++) {
-		for (int b = -11; b < 11; b++) {
-			float choose_mat = drand48();
+	for (int a = -3; a < 3; a++) 
+	{
+		for (int b = -3; b < 3; b++)
+		{
+			float chooseMat = drand48();
 			vec3 center(a + 0.9 * drand48(), 0.2, b + 0.9 * drand48());
-			if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
-				if (choose_mat < 0.8) {  // diffuse
+			if ((center - vec3(4, 0.2, 0)).length() > 0.9)
+			{
+				if (chooseMat < 0.7) 
+				{  // diffuse
 					// 运动模糊的小球
 					list[i++] = new MovingSphere(center, center + vec3(0, 0.5 * drand48(), 0), 0.0, 1.0, 0.2,
-						new lambertian(vec3(drand48() * drand48(), drand48() * drand48(),
-							drand48() * drand48())));
+						new lambertian(vec3(drand48(), drand48(), drand48())));
 				}
-				else if (choose_mat < 0.95) { // metal
+				else if (chooseMat < 0.95) 
+				{ // metal
 					list[i++] = new sphere(center, 0.2,
-						new metal(vec3(0.5 * (1 + drand48()), 0.5 * (1 + drand48()),
-							0.5 * (1 + drand48())), 0.5 * drand48()));
+						new metal(vec3(0.5 * (1 + drand48()), 0.5 * (1 + drand48()), 0.5 * (1 + drand48())), 0.5 * drand48()));
 				}
 				else {  // glass
 					list[i++] = new sphere(center, 0.2, new dielectric(1.5));
@@ -140,9 +106,10 @@ int main()
 	float dist_to_focus = 10.0;
 	float aperture = 0.1;
 	camera renderCamera(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny), aperture, dist_to_focus, 0.0, 1.0);
-
-
-	Hitable *world = randomScene();
+	HitableList *world = randomScene();
+	int size = world->getListSize();
+	Hitable**  allObject = world->getList();
+	BvhNode*   rootObject = new BvhNode(allObject, size, 0.0f, 1.0f);
 
 	for (int j = ny - 1; j >= 0; j--)
 	{
@@ -155,7 +122,7 @@ int main()
 				float v = (float(j) + float(random(0, 100)) / 100.0f) / float(ny);
 				Ray  r = renderCamera.getRay(u, v);
 
-				pixelColor += color(r, world, 0);
+				pixelColor += color(r, rootObject, 0);
 			}
 			pixelColor /= (float)ns;
 			pixelColor = vec3(sqrt(pixelColor[0]), sqrt(pixelColor[1]), sqrt(pixelColor[2]));

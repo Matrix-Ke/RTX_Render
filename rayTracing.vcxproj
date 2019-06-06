@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h" />
+    <ClInclude Include="bvh.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="drand48.h" />
     <ClInclude Include="hitableList.h" />
@@ -162,9 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aabb.cpp" />
+    <ClCompile Include="bvh.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="drand48.cpp" />
-    <ClCompile Include="hitable.cpp" />
     <ClCompile Include="hitable.h" />
     <ClCompile Include="hitableList.cpp" />
     <ClCompile Include="material.cpp" />
@@ -176,6 +177,7 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ray.cpp" />
+    <ClCompile Include="sphere.cpp" />
     <ClCompile Include="Vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

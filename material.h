@@ -24,9 +24,9 @@ private:
 class lambertian :public Material
 {
 private:
-	vec3   albedo;
+	vec3   _albedo;
 public:
-	lambertian(const vec3& rAlbedo) : albedo(rAlbedo) {};
+	lambertian(const vec3& rAlbedo) : _albedo(rAlbedo) {};
 	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const override;
 
 };
@@ -35,7 +35,7 @@ public:
 class metal : public Material
 {
 private:
-	vec3	albedo;
+	vec3	_albedo;
 	float   fuzz;
 public:
 	metal(const vec3& rAlbedo, const float f);

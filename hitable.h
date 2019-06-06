@@ -27,17 +27,3 @@ private:
 };
 
 
-class BvhNode : public Hitable
-{
-	BvhNode();
-	BvhNode(Hitable** l, int n, float time0, float time1);
-	virtual bool hit(const Ray& r, float tmin, float tmax, Hit_record & rec) const override;
-private:
-	Hitable*	_left;
-	Hitable*	_right;
-	AABB		box;
-};
-
-
-
-int boxCompare(const void* a, const void* b);

@@ -42,11 +42,11 @@ bool lambertian::scatter(const Ray & rayIn, const Hit_record & rec, vec3 & atten
 {
 	vec3 target = rec.normal + randomPointInUintsphere();
 	scattered = Ray(rec.p, target);
-	attenuation = albedo;
+	attenuation = _albedo;
 	return true;
 }
 
-metal::metal(const vec3 & rAlbedo, const float f) : albedo(rAlbedo)
+metal::metal(const vec3 & rAlbedo, const float f) : _albedo(rAlbedo)
 {
 	if (f < 1)
 		fuzz = f;
@@ -60,7 +60,7 @@ bool metal::scatter(const Ray & rayIn, const Hit_record & rec, vec3 & attenuatio
 
 	vec3	reflected = reflect(makeUnitVector(rayIn.direction()), rec.normal);
 	scattered = Ray(rec.p, reflected + fuzz * randomPointInUintsphere());
-	attenuation = albedo;
+	attenuation = _albedo;
 	return (dot(scattered.direction(), rec.normal) > 0);
 }
 
