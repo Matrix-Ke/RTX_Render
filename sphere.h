@@ -70,7 +70,7 @@ public:
 	}
 	virtual bool hit(const Ray& r, float t_min, float t_max, Hit_record& rec) const override
 	{
-		// ĞŞ¸ÄÖ®Ç°µÄcenterÎªÒ»¸öÊ±¼äÏà¹ØµÄÎ»ÖÃ
+		// ï¿½Ş¸ï¿½Ö®Ç°ï¿½ï¿½centerÎªÒ»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Øµï¿½Î»ï¿½ï¿½
 		vec3 oc = r.origin() - center(r.time());
 		float a = dot(r.direction(), r.direction());
 		float b = dot(oc, r.direction());

@@ -161,15 +161,21 @@
     <ClInclude Include="sphere.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="aabb.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="drand48.cpp" />
+    <ClCompile Include="hitable.cpp" />
     <ClCompile Include="hitable.h" />
     <ClCompile Include="hitableList.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="rayTracing.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ray.cpp" />
     <ClCompile Include="Vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

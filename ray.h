@@ -6,14 +6,11 @@ class Ray
 {
 public:
 	Ray() {};
-	Ray(const vec3& sPnt, const vec3 & dir, float time = 0.0 ) : originPnt(sPnt), rayDirection(dir) , currentTime(time){};
-	vec3 origin() const { return originPnt; };
-	vec3 direction() const { return rayDirection; };
-	vec3 pointAtParameter(float t) const
-	{
-		return originPnt + t * rayDirection;
-	}
-	float time() const { return currentTime; };
+	Ray(const vec3& sPnt, const vec3 & dir, float time = 0.0 );
+	vec3 origin() const;
+	vec3 direction() const ;
+	vec3 pointAtParameter(float t) const;
+	float time() const ;
 
 private:
 	vec3  originPnt;

@@ -44,9 +44,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="rayTracing.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Vec3.h">
       <Filter>头文件</Filter>
     </ClCompile>
@@ -54,6 +51,27 @@
       <Filter>头文件</Filter>
     </ClCompile>
     <ClCompile Include="hitableList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="hitable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="aabb.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="drand48.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ray.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
