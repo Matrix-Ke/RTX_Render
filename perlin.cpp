@@ -13,13 +13,13 @@ float perlin::noise(const vec3 & p) const
 	int j = floor(p.y());
 	int k = floor(p.z());
 	
-	//vec3 c[2][2][2];
-	float  c[2][2][2];
+	vec3 c[2][2][2];
+	//float  c[2][2][2];
 	for (int di = 0; di < 2; di++)
 		for (int dj = 0; dj < 2; dj++)
 			for (int dk = 0; dk < 2; dk++)
-				c[di][dj][dk] = _ranFloat[_permX[(i + di) & 255] ^ _permY[(j + dj) & 255] ^ _permZ[(k + dk) & 255]];
-	return triLinearInterp(c, u, v, w);
+				c[di][dj][dk] = _ranvec[_permX[(i + di) & 255] ^ _permY[(j + dj) & 255] ^ _permZ[(k + dk) & 255]];
+	return perlinInterp(c, u, v, w);
 
 
 }

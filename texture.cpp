@@ -38,7 +38,7 @@ vec3 CheckerTexture::value(float u, float v, const vec3 & p) const
 
 noiseTexture::noiseTexture()
 {
-	_scale = 3.0f;
+	_scale = 2.5f;
 }
 
 noiseTexture::noiseTexture(float sc):_scale(sc)
@@ -47,8 +47,13 @@ noiseTexture::noiseTexture(float sc):_scale(sc)
 
 vec3 noiseTexture::value(float u, float v, const vec3 & p) const
 {
-	//return vec3(1, 1, 1) * 0.5 * (1 + sin(_scale * p.x()) + 5 * _noise.noise(p));
-	return vec3(1, 1, 1)*_noise.noise(_scale*p);
+	//return vec3(1, 1, 1)*_noise.noise(p);
+	//return vec3(1, 1, 1)*_noise.noise(_scale*p);
+	//return vec3(1, 1, 1)*_noise.turb(_scale*p);
+	//return vec3(1, 1, 1) * 0.5 * (1 + _noise.turb(_scale* p));
+	 // 加缩放和扰动后
+	return vec3(1, 1, 1)*0.5*(1 + sin(_scale*p.z() + 10 * _noise.turb(_scale*p)));
+
 }
 
 
