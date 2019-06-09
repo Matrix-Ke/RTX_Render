@@ -7,7 +7,11 @@ class perlin
 public:
 	float noise(const vec3& p) const;
 
+	// 噪声扰动
+	float turb(const vec3& p, int depth = 7) const;
+
 private:
+	static vec3*    _ranvec;
 	static float*	_ranFloat;
 	static int*		_permX;
 	static int*		_permY;
@@ -19,7 +23,9 @@ private:
 
 
 
-static float* perlinGenerate();
+static vec3* perlinGenerate();
+
+static float* perlinGenerateF();
 
 // 改变序列函数
 void	permute(int* p, int n);
@@ -28,3 +34,5 @@ static int* perlinGeneratePerm();
 
 
 inline float triLinearInterp(float cp[2][2][2], float u, float v, float w);
+
+inline float perlinInterp(vec3 c[2][2][2], float u, float v, float w);
