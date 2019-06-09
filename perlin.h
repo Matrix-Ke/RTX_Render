@@ -27,3 +27,4 @@ void	permute(int* p, int n);
 static int* perlinGeneratePerm();
 
 
+inline float triLinearInterp(float cp[2][2][2], float u, float v, float w);
