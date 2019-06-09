@@ -20,12 +20,13 @@ vec3 AABB::max() const
 
 bool AABB::hit(const Ray & r, float tmin, float tmax) const
 {
+	vec3 tempVec = r.direction();
+	vec3 origin = r.origin();
 	for (int index = 0; index < 3; index++)
-	{
-		vec3 tempVec = r.direction();
+	{	
 		float invertDist = 1.0f / tempVec[index];
-		float t0 = (_min[index] - tempVec[index]) * invertDist;
-		float t1 = (_max[index] - tempVec[index]) * invertDist;
+		float t0 = (_min[index] - tempVec[index] - origin[index]) * invertDist;
+		float t1 = (_max[index] - tempVec[index] - origin[index]) * invertDist;
 		if (invertDist < 0.0f)
 		{
 			std::swap(t0, t1);

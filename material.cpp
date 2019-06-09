@@ -38,11 +38,15 @@ bool refract(const vec3 & rayIn, const vec3 & normal, float rayRatio, vec3 & ref
 		return false;
 }
 
+lambertian::lambertian(Texture*   a):_albedo(a)
+{
+}
+
 bool lambertian::scatter(const Ray & rayIn, const Hit_record & rec, vec3 & attenuation, Ray & scattered) const
 {
 	vec3 target = rec.normal + randomPointInUintsphere();
 	scattered = Ray(rec.p, target);
-	attenuation = _albedo;
+	attenuation = _albedo->value(0, 0, rec.p);
 	return true;
 }
 

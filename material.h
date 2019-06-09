@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "ray.h"
+#include "texture.h"
 #include "hitable.h"
 #include "drand48.h"
 //#define random(rAlbedo, b)   (rand()%(b - rAlbedo +1 ) +rAlbedo )
@@ -24,9 +25,10 @@ private:
 class lambertian :public Material
 {
 private:
-	vec3   _albedo;
+	Texture*   _albedo;
 public:
-	lambertian(const vec3& rAlbedo) : _albedo(rAlbedo) {};
+	//lambertian(const vec3& rAlbedo) : _albedo(rAlbedo) {};
+	lambertian( Texture*  a);
 	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const override;
 
 };
