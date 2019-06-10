@@ -38,6 +38,11 @@ bool refract(const vec3 & rayIn, const vec3 & normal, float rayRatio, vec3 & ref
 		return false;
 }
 
+vec3 Material::emitted(float u, float v, const vec3 & p) const
+{
+	return vec3(0, 0, 0);
+};
+
 lambertian::lambertian(Texture*   a):_albedo(a)
 {
 }
@@ -114,4 +119,18 @@ bool dielectric::scatter(const Ray & rayIn, const Hit_record & rec, vec3 & atten
 	}
 
 	return true;
+}
+
+diffuseLight::diffuseLight(Texture * a):_emit(a)
+{
+}
+
+bool diffuseLight::scatter(const Ray & rayIn, const Hit_record & rec, vec3 & attenuation, Ray & scattered) const
+{
+	return false;
+}
+
+vec3 diffuseLight::emitted(float u, float v, const vec3 & p) const
+{
+	return _emit->value(u, v, p);
 }

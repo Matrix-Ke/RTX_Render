@@ -18,6 +18,9 @@ class Material
 {
 public:
 	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const = 0;
+
+	//Emissive
+	virtual vec3 emitted(float u, float v, const vec3 &p)const;
 private:
 
 };
@@ -67,4 +70,16 @@ private:
 	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const override;
 };
 
+//Emissive
+class diffuseLight : public Material
+{
+public:
+	diffuseLight(Texture* a);
 
+	virtual bool scatter(const Ray& rayIn, const Hit_record& rec, vec3& attenuation, Ray& scattered) const override;
+
+	virtual vec3 emitted(float u, float v, const vec3 &p)const;
+
+private:
+	Texture*	_emit;
+};
