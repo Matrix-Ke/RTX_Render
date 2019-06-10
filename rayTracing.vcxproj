@@ -156,11 +156,14 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="drand48.h" />
     <ClInclude Include="hitableList.h" />
+    <ClInclude Include="imageTexture.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="perlin.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="sphere.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="stb_image_write.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -168,8 +171,10 @@
     <ClCompile Include="bvh.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="drand48.cpp" />
+    <ClCompile Include="hitable.cpp" />
     <ClCompile Include="hitable.h" />
     <ClCompile Include="hitableList.cpp" />
+    <ClCompile Include="imageTexture.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

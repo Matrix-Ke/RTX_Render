@@ -7,7 +7,7 @@ class perlin
 public:
 	float noise(const vec3& p) const;
 
-	// ÔëÉùÈÅ¶¯
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½
 	float turb(const vec3& p, int depth = 7) const;
 
 private:
@@ -27,7 +27,7 @@ static vec3* perlinGenerate();
 
 static float* perlinGenerateF();
 
-// ¸Ä±äĞòÁĞº¯Êı
+// ï¿½Ä±ï¿½ï¿½ï¿½ï¿½Ğºï¿½ï¿½ï¿½
 void	permute(int* p, int n);
 
 static int* perlinGeneratePerm();

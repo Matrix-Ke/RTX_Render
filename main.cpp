@@ -4,18 +4,24 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#include "stb_image_write.h"
+
+#include "imageTexture.h"
 #include "sphere.h"
 #include "hitableList.h"
 #include "camera.h"
 #include "material.h"
 #include "bvh.h"
+
 #define ImageWidth  200
 #define ImageLength  100
 #define  RecursionDepth	10
 #define	samplePixel	10;
 #define random(a, b)   (rand()%(b - a +1 ) +a )
-//#define randomNum	(float((rand()%100)) /100.0f)
-//#define randomNum (float((rand()%(100)))/100.0f)
+
 using namespace std;
 
 
@@ -46,8 +52,6 @@ vec3 color(const Ray& r, Hitable* world, int depth)
 }
 
 
-
-//
 HitableList*  randomScene()
 {
 	int n = 50;
@@ -93,12 +97,26 @@ HitableList*  randomScene()
 	return new HitableList(list, i);
 }
 
-HitableList *two_perlin_spheres()
+Hitable *earth() 
+{
+	int nx, ny, nn;
+	unsigned char *texData = stbi_load("picture.png", &nx, &ny, &nn, 0);
+	if (texData == nullptr)
+	{
+		cout << " picture load fail \n";
+	}
+	cout << nx << "  " << ny << "  " << nn << endl;
+	Material *mat = new lambertian(new ImageTexture(texData, nx, ny));
+	return new sphere(vec3(0, 2, 0), 2, mat);
+}
+
+HitableList *twoPerlinSpheres()
 {
 	Texture *pertext = new noiseTexture();
 	Hitable **list = new Hitable*[2];
 	list[0] = new sphere(vec3(0, -1000, 0), 1000, new lambertian(pertext));
-	list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
+	//list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
+	list[1] = earth();
 	return new HitableList(list, 2);
 }
 
@@ -125,7 +143,7 @@ int main()
 	//random_device rd;
 
 
-	HitableList* world = two_perlin_spheres();
+	HitableList* world = twoPerlinSpheres();
 	//int size = world->getListSize();
 	//Hitable**  allObject = world->getList();
 	//BvhNode*   root = new BvhNode(allObject, size, 0.0f, 1.0f);

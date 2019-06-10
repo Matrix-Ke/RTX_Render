@@ -5,7 +5,7 @@ float perlin::noise(const vec3 & p) const
 	float u = p.x() - floor(p.x());
 	float v = p.y() - floor((p.y()));
 	float w = p.z() - floor(p.z());
-	// hermite cubic ·½·¨Æ½»¬
+	// hermite cubic ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½
 	u = u * u*(3 - 2 * u);
 	v = v * v*(3 - 2 * v);
 	w = w * w*(3 - 2 * w);

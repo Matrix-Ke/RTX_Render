@@ -1,3 +1,4 @@
+#include <iostream>
 #include "bvh.h"
 #include "drand48.h"
 

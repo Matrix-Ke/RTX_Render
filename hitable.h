@@ -1,13 +1,19 @@
 #pragma once
-#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "ray.h"
 #include "aabb.h"
 
 class Material;
 
+
+void getSphereUV(const vec3& p, float& u, float& v);
+
 struct Hit_record
 {
 	float t;
+	float u;
+	float v;
 	vec3  p;
 	vec3 normal;
 	Material* matPtr;

@@ -6,10 +6,10 @@
 class sphere : public Hitable
 {
 private:
-	vec3	center;
-	float	radius;
-	Material*  matPtr;
-	AABB	box;
+	vec3		_center;
+	float		_radius;
+	Material*	_matPtr;
+	AABB		_box;
 
 public:
 	sphere() {};
@@ -38,8 +38,8 @@ private:
 private:
 	vec3    _centerPos1;
 	vec3	_centerPos2;
-	float  _startTime;
-	float  _endTime;
-	float  _radius;
+	float	_startTime;
+	float	_endTime;
+	float	_radius;
 	Material*  _matPtr;
 };

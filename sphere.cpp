@@ -1,15 +1,15 @@
 #include "sphere.h"
 
-sphere::sphere(const vec3 & cen, const float r, Material * mPtr) : center(cen), radius(r), matPtr(mPtr)
+sphere::sphere(const vec3 & cen, const float r, Material * mPtr) : _center(cen), _radius(r), _matPtr(mPtr)
 {
 }
 
 bool sphere::hit(const Ray & r, float t_min, float t_max, Hit_record & rec) const
 {
-	vec3	oc = r.origin() - center;
+	vec3	oc = r.origin() - _center;
 	float a = dot(r.direction(), r.direction());
 	float b = 2 * dot(oc, r.direction());
-	float c = dot(oc, oc) - radius * radius;
+	float c = dot(oc, oc) - _radius * _radius;
 
 	float discriminant = b * b - a * c * 4;
 	if (discriminant >= 0)
@@ -19,8 +19,9 @@ bool sphere::hit(const Ray & r, float t_min, float t_max, Hit_record & rec) cons
 		{
 			rec.t = temp;
 			rec.p = r.pointAtParameter(temp);
-			rec.normal = (rec.p - center) / radius;
-			rec.matPtr = matPtr;
+			getSphereUV((rec.p - _center) / _radius, rec.u, rec.v);
+			rec.normal = (rec.p - _center) / _radius;
+			rec.matPtr = _matPtr;
 			return true;
 		}
 		temp = (-b + sqrt(discriminant)) / (2 * a);
@@ -28,8 +29,9 @@ bool sphere::hit(const Ray & r, float t_min, float t_max, Hit_record & rec) cons
 		{
 			rec.t = temp;
 			rec.p = r.pointAtParameter(temp);
-			rec.normal = (rec.p - center) / radius;
-			rec.matPtr = matPtr;
+			getSphereUV((rec.p - _center) / _radius, rec.u, rec.v);
+			rec.normal = (rec.p - _center) / _radius;
+			rec.matPtr = _matPtr;
 			return true;
 		}
 	}
@@ -38,7 +40,7 @@ bool sphere::hit(const Ray & r, float t_min, float t_max, Hit_record & rec) cons
 
 bool sphere::boundingBox(float t0, float t1, AABB & box) const
 {
-	box = AABB(center - vec3(radius, radius, radius), center + vec3(radius, radius, radius));
+	box = AABB(_center - vec3(_radius, _radius, _radius), _center + vec3(_radius, _radius, _radius));
 	return true;
 }
 
