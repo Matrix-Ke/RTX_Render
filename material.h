@@ -51,8 +51,6 @@ public:
 
 
 //this code for dielectrics material
-// 反射系数的求解是是一个非常复杂的过程，Christophe Schlick这个人提供一个逼近公式，
-// 这个公式被称为“ChristopheSchlick’s Approximation”。Wiki链接：
 // https://en.wikipedia.org/wiki/Schlick%27s_approximation
 
 float schlick(float cosine, float ref_idx);

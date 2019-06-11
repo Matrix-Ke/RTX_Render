@@ -13,10 +13,11 @@
 #include "sphere.h"
 #include "hitableList.h"
 #include "camera.h"
-#include "material.h"
+#include "Material.h"
 #include "bvh.h"
+#include "rectangle.h"
 
-#define ImageWidth  200
+#define ImageWidth  100
 #define ImageLength  100
 #define  RecursionDepth	10
 #define	samplePixel	10;
@@ -33,21 +34,27 @@ vec3 color(const Ray& r, Hitable* world, int depth)
 	{
 		Ray scattered;
 		vec3 attenuation;
+
+		// emissive
+		vec3	emitted = rec.matPtr->emitted(rec.u, rec.v, rec.p);
+
 		if (depth < RecursionDepth && rec.matPtr->scatter(r, rec, attenuation, scattered))
 		{
-			return attenuation * color(scattered, world, depth + 1);
+			return emitted + attenuation * color(scattered, world, depth + 1);
 		}
 		else
 		{
-			return vec3(0.0, 0.0, 0.0);
+			//return vec3(0.0, 0.0, 0.0);
+			return emitted;
 		}
 	}
 	else
 	{
-		vec3 unitDir = r.direction();
-		unitDir.makeUnitVector();
-		float t = 0.5 * (unitDir.y() + 1.0);
-		return vec3(1.0, 1.0, 1.0)*(1.0 - t) + vec3(0.5, 0.7, 1.0) * t;
+		//vec3 unitDir = r.direction();
+		//unitDir.makeUnitVector();
+		//float t = 0.5 * (unitDir.y() + 1.0);
+		//return vec3(1.0, 1.0, 1.0)*(1.0 - t) + vec3(0.5, 0.7, 1.0) * t;
+		return vec3(0, 0, 0);
 	}
 }
 
@@ -121,6 +128,52 @@ HitableList *twoPerlinSpheres()
 }
 
 
+// rectangle & light 
+Hitable *simple_light() {
+	Texture *pertext = new noiseTexture(4);
+	Texture *checker = new CheckerTexture(new ConstantTexture(vec3(0.2, 0.3, 0.1)),
+		new ConstantTexture(vec3(0.9, 0.9, 0.9)));
+	Hitable **list = new Hitable *[4];
+	list[0] = new sphere(vec3(0, -700, 0), 700, new lambertian(checker));
+	list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
+	list[2] = new sphere(vec3(0, 7, 0), 2, new diffuseLight(new ConstantTexture(vec3(4, 4, 4))));
+	list[3] = new xyRect(3, 5, 1, 3, -2, new diffuseLight(new ConstantTexture(vec3(4, 4, 4))));
+	return new HitableList(list, 4);
+}
+
+Hitable *test() {
+	Texture *pertext = new noiseTexture(4);
+	Texture *checker = new CheckerTexture(new ConstantTexture(vec3(0.2, 0.3, 0.1)),
+		new ConstantTexture(vec3(0.9, 0.9, 0.9)));
+	Hitable **list = new Hitable *[4];
+	list[0] = new sphere(vec3(0, -700, 0), 700, new lambertian(checker));
+	list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
+	list[2] = new sphere(vec3(0, 7, 0), 2, new diffuseLight(new ConstantTexture(vec3(11, 11, 11))));
+	//    list[3] = new xyRect(3,5,1,3,-2,new diffuseLight(new ConstantTexture(vec3(4,4,4))));
+	return new HitableList(list, 3);
+}
+
+// cornell_box经典场景
+Hitable *cornell_box() {
+	Hitable **list = new Hitable *[8];
+	int i = 0;
+	Texture *pertext = new noiseTexture(4);
+	Material *red = new lambertian(new ConstantTexture(vec3(0.65, 0.05, 0.05)));
+	Material *white = new lambertian(new ConstantTexture(vec3(0.73, 0.73, 0.73)));
+	Material *green = new lambertian(new ConstantTexture(vec3(0.12, 0.45, 0.15)));
+	Material *light = new diffuseLight(new ConstantTexture(vec3(15, 15, 15)));
+	Material *redM = new lambertian(pertext);
+	    //list[i++] = new flip_normals(new yzRect(0, 555, 0, 555, 555, green));
+	list[i++] = new yzRect(0, 555, 0, 555, 30, light);
+	list[i++] = new yzRect(0, 555, 0, 555, 0, redM);
+	//    list[i++] = new xz_rect(0, 556, 0, 556, 0, light);
+	//    list[i++] = new
+	//    list[i++] = new flip_normals(new xz_rect(200, 300, 200, 300, 100, red));
+	//    list[i++] = new flip_normals(new xyRect(-200, 1555, -200, 1555, 0, light));
+	return new HitableList(list, i);
+}
+
+
 int main()
 {
 	ofstream   outImage("./Image/picture_1.ppm", ios::out);
@@ -134,16 +187,19 @@ int main()
 
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 
-	vec3 lookfrom(13, 2, 3);
-	vec3 lookat(0, 0, 0);
+
+	vec3 lookfrom(278, 278, -800);
+	vec3 lookat(278, 278, 0);
 	float dist_to_focus = 10.0;
 	float aperture = 0.1;
-	camera renderCamera(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny), aperture, dist_to_focus, 0.0, 1.0);
+	float vfov = 40.0;
+	camera renderCamera(lookfrom, lookat, vec3(0, 1, 0), vfov, float(nx) / float(ny), aperture, dist_to_focus, 0.0, 1.0);
+
 
 	//random_device rd;
 
 
-	HitableList* world = twoPerlinSpheres();
+	Hitable* world = simple_light();
 	//int size = world->getListSize();
 	//Hitable**  allObject = world->getList();
 	//BvhNode*   root = new BvhNode(allObject, size, 0.0f, 1.0f);
