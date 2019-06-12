@@ -1,7 +1,7 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "ray.h"
+#include "Ray.h"
 #include "aabb.h"
 
 class Material;
@@ -30,6 +30,19 @@ public:
 
 private:
 
+};
+
+
+//flip face Normal 
+class flipNormals : public Hitable {
+public:
+	flipNormals(Hitable *p) : ptr(p) {}
+	virtual bool hit(const Ray& r, float t_min, float t_max, Hit_record& rec) const override;
+	virtual bool boundingBox(float t0, float t1, AABB& box) const override;
+
+private:
+
+	Hitable *ptr;
 };
 
 

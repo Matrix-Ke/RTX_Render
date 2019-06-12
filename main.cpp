@@ -20,43 +20,10 @@
 #define ImageWidth  200
 #define ImageLength  200
 #define  RecursionDepth	10
-#define	samplePixel	16;
+#define	samplePixel	100;
 #define random(a, b)   (rand()%(b - a +1 ) +a )
 
 using namespace std;
-
-
-vec3 color(const Ray& r, Hitable* world, int depth)
-{
-	Hit_record  rec;
-
-	if (world->hit(r, 0, FLT_MAX, rec))
-	{
-		Ray scattered;
-		vec3 attenuation;
-
-		// emissive
-		vec3	emitted = rec.matPtr->emitted(rec.u, rec.v, rec.p);
-
-		if (depth < RecursionDepth && rec.matPtr->scatter(r, rec, attenuation, scattered))
-		{
-			return emitted + attenuation * color(scattered, world, depth + 1);
-		}
-		else
-		{
-			//return vec3(0.0, 0.0, 0.0);
-			return emitted;
-		}
-	}
-	else
-	{
-		//vec3 unitDir = r.direction();
-		//unitDir.makeUnitVector();
-		//float t = 0.5 * (unitDir.y() + 1.0);
-		//return vec3(1.0, 1.0, 1.0)*(1.0 - t) + vec3(0.5, 0.7, 1.0) * t;
-		return vec3(0, 0, 0);
-	}
-}
 
 
 HitableList*  randomScene()
@@ -153,26 +120,59 @@ Hitable *test() {
 	return new HitableList(list, 3);
 }
 
-// cornell_box经典场景
-Hitable *cornell_box() {
-	Hitable **list = new Hitable *[8];
+// cornellBox
+Hitable *cornellBox() {
+	Hitable **list = new Hitable*[8];
 	int i = 0;
-	Texture *pertext = new noiseTexture(4);
 	Material *red = new lambertian(new ConstantTexture(vec3(0.65, 0.05, 0.05)));
 	Material *white = new lambertian(new ConstantTexture(vec3(0.73, 0.73, 0.73)));
 	Material *green = new lambertian(new ConstantTexture(vec3(0.12, 0.45, 0.15)));
 	Material *light = new diffuseLight(new ConstantTexture(vec3(15, 15, 15)));
-	Material *redM = new lambertian(pertext);
-	    //list[i++] = new flip_normals(new yzRect(0, 555, 0, 555, 555, green));
-	list[i++] = new yzRect(0, 555, 0, 555, 30, light);
-	list[i++] = new yzRect(0, 555, 0, 555, 0, redM);
-	//    list[i++] = new xz_rect(0, 556, 0, 556, 0, light);
-	//    list[i++] = new
-	//    list[i++] = new flip_normals(new xz_rect(200, 300, 200, 300, 100, red));
-	//    list[i++] = new flip_normals(new xyRect(-200, 1555, -200, 1555, 0, light));
+	//x range from(0, 555)
+	list[i++] = new yzRect(0, 555, 0, 555, 0, red);
+	list[i++] = new flipNormals(new yzRect(0, 555, 0, 555, 555, green));
+	//y range from(0, 555)
+	list[i++] = new xzRect(213, 343, 227, 332, 554, light);
+	list[i++] = new flipNormals(new xzRect(0, 555, 0, 555, 555, white));
+	list[i++] = new xzRect(0, 555, 0, 555, 0, white);
+
+	//z range from( ? , 555)
+	list[i++] = new flipNormals(new xyRect(0, 555, 0, 555, 555, white));
 	return new HitableList(list, i);
 }
 
+vec3 color(const Ray& r, Hitable* world, int depth)
+{
+	Hit_record  rec;
+
+	if (world->hit(r, 0.001, FLT_MAX, rec))
+	{
+		Ray scattered;
+		vec3 attenuation;
+
+		// emissive
+		vec3	emitted = rec.matPtr->emitted(rec.u, rec.v, rec.p);
+
+		if (depth < RecursionDepth && rec.matPtr->scatter(r, rec, attenuation, scattered))
+		{
+			return emitted + attenuation * color(scattered, world, depth + 1);
+		}
+		else
+		{
+			//return vec3(0.0, 0.0, 0.0);
+			return emitted;
+		}
+	}
+	else
+	{
+		//vec3 unitDir = r.direction();
+		//unitDir.makeUnitVector();
+		//float t = 0.5 * (unitDir.y() + 1.0);
+		//return vec3(1.0, 1.0, 1.0)*(1.0 - t) + vec3(0.5, 0.7, 1.0) * t;
+		//cout << " hit ";
+		return vec3(0, 0, 0);
+	}
+}
 
 int main()
 {
@@ -188,8 +188,8 @@ int main()
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 
 
-	vec3 lookfrom(13, 2, 3);
-	vec3 lookat(0, 2, 0);
+	vec3 lookfrom(278, 278, -800);
+	vec3 lookat(278, 278, 0);
 	float dist_to_focus = 10.0;
 	float aperture = 0.1;
 	float vfov = 40.0;
@@ -197,7 +197,7 @@ int main()
 
 
 	//random_device rd;
-	Hitable* world = simpleLight();
+	Hitable* world = cornellBox();
 	//int size = world->getListSize();
 	//Hitable**  allObject = world->getList();
 	//BvhNode*   root = new BvhNode(allObject, size, 0.0f, 1.0f);
