@@ -17,10 +17,10 @@
 #include "bvh.h"
 #include "rectangle.h"
 
-#define ImageWidth  100
-#define ImageLength  100
+#define ImageWidth  200
+#define ImageLength  200
 #define  RecursionDepth	10
-#define	samplePixel	10;
+#define	samplePixel	16;
 #define random(a, b)   (rand()%(b - a +1 ) +a )
 
 using namespace std;
@@ -129,7 +129,7 @@ HitableList *twoPerlinSpheres()
 
 
 // rectangle & light 
-Hitable *simple_light() {
+Hitable *simpleLight() {
 	Texture *pertext = new noiseTexture(4);
 	Texture *checker = new CheckerTexture(new ConstantTexture(vec3(0.2, 0.3, 0.1)),
 		new ConstantTexture(vec3(0.9, 0.9, 0.9)));
@@ -188,8 +188,8 @@ int main()
 	outImage << "P3\n" << nx << " " << ny << "\n255\n";
 
 
-	vec3 lookfrom(278, 278, -800);
-	vec3 lookat(278, 278, 0);
+	vec3 lookfrom(13, 2, 3);
+	vec3 lookat(0, 2, 0);
 	float dist_to_focus = 10.0;
 	float aperture = 0.1;
 	float vfov = 40.0;
@@ -197,9 +197,7 @@ int main()
 
 
 	//random_device rd;
-
-
-	Hitable* world = simple_light();
+	Hitable* world = simpleLight();
 	//int size = world->getListSize();
 	//Hitable**  allObject = world->getList();
 	//BvhNode*   root = new BvhNode(allObject, size, 0.0f, 1.0f);

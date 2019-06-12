@@ -6,7 +6,7 @@
 xyRect::xyRect(float _x0, float _x1, float _y0, float _y1, float _k, Material * mat)
 					: _x0(_x0), _x1(_x1), _y0(_y0), _y1(_y1), _k(_k), _mPtr(mat) {};
 
-// ÊÇ·ñ»÷ÖÐ£¬ÐÎ²Î´«ÁËHit_recordµÄÒýÓÃ¡£
+// ï¿½Ç·ï¿½ï¿½ï¿½Ð£ï¿½ï¿½Î²Î´ï¿½ï¿½ï¿½Hit_recordï¿½ï¿½ï¿½ï¿½ï¿½Ã¡ï¿½
 bool xyRect::hit(const Ray& r, float t0, float t1, Hit_record& rec) const {
 	float t = (_k - r.origin().z()) / r.direction().z();
 	if (t < t0 || t > t1)
