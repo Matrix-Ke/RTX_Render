@@ -13,7 +13,7 @@ endif()
 set(PROJECT_VERSION 1.0.0)
 set(PROJECT_NAME "RTX_Render")
 Project(${PROJECT_NAME} LANGUAGES CXX VERSION ${PROJECT_VERSION})
-message(STATUS "Version: ${PROJECT_VERSION}")
+message(STATUS "${PROJECT_NAME} Version: ${PROJECT_VERSION}")
 set(PROJECT_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 # Cmake划分目录
 set(ROOT_FOLDER_NAME "RTX_Render")
@@ -22,13 +22,16 @@ set(SECOND_FOLDER_NAME "")
 
 #===================================引入CMake配置文件========================
 if(NOT CMakeInit_FOUND)
-    message(STATUS ${PROJECT_NAME}.CMakeInit_FOUND = "Found ${CMakeInit_FOUND}"  )
     include(CMake/CMakeInit.cmake)
+    message(STATUS ${PROJECT_NAME}.CMakeInit_FOUND = "${CMakeInit_FOUND}"  )
 endif(NOT CMakeInit_FOUND)
+
 if(NOT SetupProject_FOUND)
-    message(STATUS ${PROJECT_NAME}.SetupProject_FOUND= "Found ${SetupProject_FOUND}" )
     include(Cmake/SetupProject.cmake)
+    message(STATUS ${PROJECT_NAME}.SetupProject_FOUND= "${SetupProject_FOUND}" )
 endif(NOT SetupProject_FOUND)
+
+
 
 # ==================================引入外部包====================================
 # include(CMake/SetUpConfigurations.cmake)
