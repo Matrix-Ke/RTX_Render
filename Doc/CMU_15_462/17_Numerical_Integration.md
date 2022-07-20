@@ -11,20 +11,6 @@ $\int_0^1\frac{1}{3}x^2\text{d}x = \left[x^3\right]_0^1 = 1$
   - integral is approximated as weighted sum
   ![](./Image/Numerical_Integration.png)
 
-**generate samples of a discrete random variable (with a known PDF)**
-To randomly select an event, select $x_i$ if $P_{i-1}<\xi\le P_i$
-$P$ 是累计概率函数 $P_j=\sum_{i=1}^j p_i$
-$\xi$ 是均匀分布随机变量 $\in [0,1)$
-![](./Image/Culculate_Distribution_Function.png)
-**Sampling continuous random variables using the inversion method**
-Cumulative probability distribution function 
-$$
-P(x) = Pr(X < x)=\int_{-\infty}^xp(t)\ \text{d}t
-$$
-Construction of samples: solve for $x=P^{-1}(\xi)$ 
-  * eg: 
-    ![](./Image/Example_Quadratic_Distribution.png)
-
 ### 我们该去对什么求积呢？what are we integrating?
 **蒙特卡洛积分Monte Carlo Integration**
 参考资料: [Monte Carlo数学原理](https://zhuanlan.zhihu.com/p/61611088)
@@ -49,13 +35,26 @@ average value times size of domain
 - 如果某个随机变量Y是随机变量X的函数：$Y=f(X)$
 - 期望的关系：$E[Y]=E[f(X)]=\int f(x) p(x) d x$
 - $$
-  \begin{align*}
-    V[Y] = E[Y^2] - E[Y]^2 \\
-    V[\sum_{i = 1}^{N}Y_i] = \sum_{i = 1}^{N}[Y_i] \\
-    V[aY] = a^2V[Y]
-  \end{align*}
+  \begin{align}
+    & V[Y] = E[Y^2] - E[Y]^2 \\
+    & V[\sum_{i = 1}^{N}Y_i] = \sum_{i = 1}^{N}[Y_i] \\
+    & V[aY] = a^2V[Y]
+  \end{align}
   $$
 
+**generate samples of a discrete random variable (with a known PDF)**
+To randomly select an event, select $x_i$ if $P_{i-1}<\xi\le P_i$
+$P$ 是累计概率函数 $P_j=\sum_{i=1}^j p_i$
+$\xi$ 是均匀分布随机变量 $\in [0,1)$
+![](./Image/Culculate_Distribution_Function.png)
+**Sampling continuous random variables using the inversion method**
+Cumulative probability distribution function 
+$$
+P(x) = Pr(X < x)=\int_{-\infty}^xp(t)\ \text{d}t
+$$
+Construction of samples: solve for $x=P^{-1}(\xi)$ 
+  * eg: 
+    ![](./Image/Example_Quadratic_Distribution.png)
 
 **引入任意分布随机变量的蒙特卡洛积分方法**
 Monte Carlo Integral: 一种近似积分方法：
@@ -95,7 +94,7 @@ $$
   &= \frac{1}{N^2}\sum\limits_{i=1}\limits^N\sigma^2\left[Y_i\right]\\
   &= \frac{1}{N^2}\left(N \sigma^2[Y] \right)\\
   &= \frac{1}{N} \sigma^2[Y]\\
-  所以有：\sigma[F_N] = \frac{1}{\sqrt{N}\sigma[Y]}
+  所以有：\sigma[F_N] = \frac{1}{\sqrt{N}}\sigma[Y]\\
 \end{align}
 $$
 结论： 
@@ -105,14 +104,14 @@ $$
 ## 采样理论
 **prerequisite** : 
 雅可比行列式： 解决多重积分变量替换和多元随机变量坐标便换求概率密度的问题
-参考资料： [雅可比行列式3Blue1Brown](https://www.bilibili.com/video/BV18J41157X8?share_source=copy_web&vd_source=e84f3d79efba7dc72e6306f35613222e)
+参考资料： [雅可比行列式](https://www.bilibili.com/video/BV18J41157X8?share_source=copy_web&vd_source=e84f3d79efba7dc72e6306f35613222e)
 
 
 **The Inversion Method**
 逆变换方法采样： 用分布在[0,1]区间的均匀随机变量去采样随机分布变量，sample is uniform, probalility is nonuniform. 
 ![](./Image/Uniform_Sample_in_Circle.png)
-eg: 在`单位圆`的表面进行均匀采样。
-  1. 因为对这个圆进行均匀采样，所以==单位面积的采样数量是一样的，即PDF相等==: $ p(x, y) = 1/\pi $ (可以理解为： 采样概率 = 1/采样面积 )
+eg: 在`单位圆`的表面进行均匀采样。（Since we’re going to sample uniformly with respect to area）
+  1. 因为要对圆是进行均匀采样，即==单位面积的采样数量是一样的，即PDF相等==: $ p(x, y) = 1/\pi $ (可以理解为： 采样概率 = 1/采样面积 )
   2. 利用jacobian矩阵将圆从笛卡尔坐标转化到极坐标系:
    $$
    p(x,y) = p(T(r,\theta))= \frac{p(r, \theta)}{|J_T(r, \theta)|}\\

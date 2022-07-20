@@ -39,6 +39,7 @@ $$
 ## 上下标
 
 $$
+p, p^\prime\\
 a^2,a_1\\
 x^{y+z},p_{ij},p_ij\\
 x_i,x_{\text i}\\
