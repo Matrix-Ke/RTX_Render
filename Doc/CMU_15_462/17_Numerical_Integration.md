@@ -34,13 +34,17 @@ average value times size of domain
 随机变量的属性 Properties of expectation：
 - 如果某个随机变量Y是随机变量X的函数：$Y=f(X)$
 - 期望的关系：$E[Y]=E[f(X)]=\int f(x) p(x) d x$
-- $$
-  \begin{align}
-    & V[Y] = E[Y^2] - E[Y]^2 \\
-    & V[\sum_{i = 1}^{N}Y_i] = \sum_{i = 1}^{N}[Y_i] \\
-    & V[aY] = a^2V[Y]
-  \end{align}
-  $$
+
+方差属性 Property of Variance:
+$$
+\begin{align}
+  & V[Y] = E[Y^2] - E[Y]^2 \\
+  & V[\sum_{i = 1}^{N}Y_i] = \sum_{i = 1}^{N}[Y_i] \\
+  & V[aY] = a^2V[Y] \\
+  & V[X] = \sum_{i =1}^NP_i(x_i - \sum_{j = 1}^{N}p_j x_j )^2 \\
+  & V[X] = \int_{\Omega} p(x)(x - \int_{\Omega}yp(y)\text{d}y)^2\text{d}x\\
+\end{align}
+$$
 
 **generate samples of a discrete random variable (with a known PDF)**
 To randomly select an event, select $x_i$ if $P_{i-1}<\xi\le P_i$
