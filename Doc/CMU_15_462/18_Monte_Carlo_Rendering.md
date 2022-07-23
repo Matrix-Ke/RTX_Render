@@ -67,7 +67,7 @@ $$(\xi_1, \xi_2) = (\sqrt{1-\xi_1^2}\cos(2\pi\xi_2), \sqrt{1-\xi_1^2}\sin(2\pi\x
    &z = \cos\theta = \phi_1
    \end{align}
    $$
-
+ 
 **直接光均匀采样Direct lighting—uniform sampling**
 采样算法：
 - Given surface point $\mathbf{p}​$ 
