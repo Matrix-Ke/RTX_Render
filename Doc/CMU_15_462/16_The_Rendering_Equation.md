@@ -1,3 +1,4 @@
+#! https://zhuanlan.zhihu.com/p/545564030
 # The Rendering Equation
 ### prerequisite 理解radiance和irradiance
 什么是irradiance ？
@@ -8,7 +9,7 @@
 什么是radiance ？ 
 * Radiance at point p in direction N is radiant energy (“#hits”) per unit time, per solid angle, per unit area perpendicular to N.
 ![](./Image/Sphere_Intgration.png)
-* ==**Confusing**== : this $\cos\theta$  has to do with parameterization of sphere, not Lambert’s law
+* **Confusing** : this $\cos\theta$  has to do with parameterization of sphere, not Lambert’s law
 * 理解兰伯特$\cos{\theta}$ 与 球面积分$\cos{\theta}$的不同tale of two consines
 ![](./Image/Lambertlaw_VS_SphereInteration.png)
 
@@ -21,7 +22,7 @@
   2. incoming radiance 未知 
 * 深入理解Rendering Equation： 
 > $$
-> Lo(\mathbf{p}, \omega_o) = L_e(\mathbf{p}, \omega_o) + \int_{\mathcal{h^2}}f_r(\mathbf{p, \omega_i}\to\omega_o )L_i(\mathbf{p}, \omega_i)(\omega_i\cdot\mathbf{N}(\mathbf{p}))\text{d}\omega_i
+> Lo(\mathbf{p}, \omega_o) = L_e(\mathbf{p}, \omega_o) + \int_{\mathcal{h^2}}f_r(\mathbf{p, \omega_i}\to\omega_o )L_i(\mathbf{p}, \omega_i)(\omega_i\cdot\mathbf{N}(\mathbf{p}))\text{d}\omega_i \\
 > $$
 * 由于一条光线的radiance输入来自另外一条光线的输出所以需要通过递归方法求解方程 
 * Recursive Raytracing
@@ -47,7 +48,7 @@ Models of Scattering
 1. 微表面：  Photon_on_surface
    ![](./Image/Photon_on_surface.png)
 2. 能量守恒： What goes in must come out! (Total energy must be conserved)
-3. 采用概率模型： In general, can talk about “probability*” a particle arriving from a given direction is scattered in another direction
+3. 采用BRDF模型： In general, can talk about “probability*” a particle arriving from a given direction is scattered in another direction
 
 Scattering off a surface: 
 ![](./Image/Torrance_Sparrow_BRDF.png)
@@ -55,19 +56,19 @@ Scattering off a surface:
 * Encodes behavior of light that “bounces off” surface
 * Given incoming direction ωi, how much light gets scattered in any given outgoing direction ωo.
 * 表面散射分布描述： $f_r( \omega_i\to\omega_o)$
-* ==可以理解brdf为一束入射光的投射到表面$\Delta\mathbf{p}$点光通量与该点某一个观察方向的出射光光通量的比值，对一束入射光的所有比值加总（积分），由能量守恒可知必然$\le1$==
+* **可以理解brdf为一束入射光的投射到表面$\Delta\mathbf{p}$点光通量与该点某一个观察方向的出射光光通量的比值，对一束入射光的所有比值加总（积分），由能量守恒可知必然$\le1$**
 $$
 f_r(\omega_i\to\omega_o)\ge0\\
 f_r(\omega_i\to\omega_o)=f_r(\omega_o\to\omega_i)\\
-\int_{\mathcal{H}^2}f_r(\omega_i\to\omega_o)\cos\theta\ \text{d}\omega_i\le1
+\int_{\mathcal{H}^2}f_r(\omega_i\to\omega_o)\cos\theta\ \text{d}\omega_i\le1 \\
 $$
 
 
 BRDF的辐射度描述  Radiometric description of BRDF
-![](./Image/Radiometric_brdf.md)
+![](./Image/Radiometric_description_BRDF.png)
 $$
 f_r(\omega_i\to\omega_o) = \frac{\text{d}L_o(\omega_o)}{\text{d}E_i(\omega_i)}
-=\frac{\text{d}L_o(\omega_o)}{\text{d}L_i(\omega_i)\cos\theta}\left[\frac{1}{sr}\right]
+=\frac{\text{d}L_o(\omega_o)}{\text{d}L_i(\omega_i)\cos\theta}\left[\frac{1}{sr}\right]\\
 $$
 
 Example: Lambertian refection
@@ -76,13 +77,13 @@ Example: Lambertian refection
 * 由于各个出射光一样：$ f_r=f_r(\mathbf{p}, \omega_i\to\omega_o)$
 > diffuse derivative:
 $$
-\begin{aligned}
+\begin{align*}
 f_r(\mathbf{p})&=\frac{\rho(\mathbf{p})}{\pi}\\
 L_o(\mathbf{p},\omega_o) &=\int_{\mathcal{H}^2}{f_r(\mathbf{p})L_i(\mathbf{p},\omega_i)\cos\theta}\ \text{d}\omega_i\\
 &=f_r(\mathbf{p})\int_{\mathcal{H}^2}{L_i(\mathbf{p},\omega_i)\cos\theta}\ \text{d}\omega_i\\
 &=f_r(\mathbf{p})E(\mathbf{p})\\
 &=\frac{\rho(\mathbf{p})}{\pi}E(\mathbf{p})\\
-\end{aligned}
+\end{align*}\\
 $$
 > $\rho(\mathbf{p})​$ is albedo, between 0 and 1, because:
 $$
@@ -100,7 +101,7 @@ f_r(\theta_i,\phi_i;\theta_o,\phi_o)=\left\{
 \begin{array}{ccl}
 \frac{1}{\cos\theta_i}       &      & {\theta_o=\theta_i \text{ and }\phi_i=\phi_o\pm\pi}\\
 0     &      & \text{otherwise}\\
-\end{array} \right.
+\end{array} \right \\
 $$
 
 **TransmissionLight**
@@ -108,14 +109,14 @@ $$
 * 折射 Snell`s  Law  
 ![](./Image/snells_law.png)
 $$
-\begin{aligned}{ccl}
+\begin{align*}{ccl}
 \eta_i\sin\theta_i
 &=\eta_t\sin\theta_t\\
 \cos\theta_t
 &=\sqrt{1-\sin^2\theta_t}\\
 &=\sqrt{1-(\frac{n_i}{n_t})^2\sin^2\theta_i}\\
 &=\sqrt{1-(\frac{n_i}{n_t})^2(1-\cos^2\theta_i)}  &\left(1-(\frac{n_i}{n_t})^2(1-\cos^2\theta_i)<0)\right)
-\end{aligned}
+\end{align*}\\
 $$
 eg: 人眼视角 Optical manhole
 ![](./Image/optical_manhole.png)
@@ -143,12 +144,12 @@ L_o(\mathbf{p}_o,\omega_o)=
 \int_\mathcal{A}
 \int_{\mathcal{H}^2}
 {S(\mathbf{p}_i,\omega_i,\mathbf{p}_o,\omega_o)L_i(\mathbf{p_i},\omega_i)\cos\theta}
-\ \text{d}\omega_i\text{d}A
+\ \text{d}\omega_i\text{d}A \\
 $$
 
 > compare BRDF: 
 $$
-L_o(\mathbf{p},\omega_o)=L_e(\mathbf{p},\omega_o) + \int_{\mathcal{H}^2}f_r(\mathbf{p},\omega_i\to\omega_o)L_i(\mathbf{p},\omega_i)\cos\theta \ \text{d}\omega_i
+L_o(\mathbf{p},\omega_o)=L_e(\mathbf{p},\omega_o) + \int_{\mathcal{H}^2}f_r(\mathbf{p},\omega_i\to\omega_o)L_i(\mathbf{p},\omega_i)\cos\theta \ \text{d}\omega_i \\
 $$
 
 
@@ -159,9 +160,9 @@ $$
 * Generate directions $\omega_j$ sampled from some distribution $p(\omega)$ 
 * Compute the estimator 
 $$
-\frac{1}{N}\sum_{j=1}^N\frac{f_r(\mathbf{p},\omega_j\to\omega_r)L_i(\mathbf{p},\omega_j)\cos\theta_j}{p(\omega_j)}
+\frac{1}{N}\sum_{j=1}^N\frac{f_r(\mathbf{p},\omega_j\to\omega_r)L_i(\mathbf{p},\omega_j)\cos\theta_j}{p(\omega_j)} \\
 $$
-* ==为了降低方差$p(\omega_j)​$ 应该尽量符合BRDF入射光线分布。 To reduce variance $p(\omega_j)​$ should match BRDF or incident radiance function==
+* *为了降低方差$p(\omega_j)​$ 应该尽量符合BRDF入射光线分布。 To reduce variance $p(\omega_j)​$ should match BRDF or incident radiance function*
 
 ```c++
 // Assume:
