@@ -15,11 +15,39 @@ f(t) =
 $$
 ![](./Image/periodical_function.png)
 
+**正交含义**
+
+向量正交：
+$$\vec{A}\cdot \vec{B} = \sum_{x= 1}^{N}(a_n b_n)= a_1b_1+ a_2b_2 + a_3b_3+ \dotsb = 0$$
+
+非周期函数正交：
+整数扩展到整个实数轴，累加就变成了积分, 两个函数内积等于0
+$$
+\begin{align*}
+    <f(x), g(x)>: = \int_{-\infty}^{+\infty}f(x)g(x)\text{d}x = 0\\
+\end{align*}\\
+$$
+周期为T的函数正交：
+$$
+<f(x), g(x)>: = \frac{1}{T}\int_{0}^{T}f(x)g(x)\text{d}x = 0\\
+$$
+
+周期为T复函数正交:
+函数f(x)与函数g(x)的共轭函数在周期内内积为0 
+$$
+<f(x), g(x)>: = \frac{1}{T}\int_{0}^{T}f(x)\overline{g(x)}\text{d}x = 0\\
+$$
+非周期复函数正交：
+函数f(x)与函数g(x)的共轭函数内积为0 
+$$
+<f(x), g(x)>: = \int_{-\infty}^{+\infty}f(x)\overline{g(x)}\text{d}x = 0\\
+$$
+
 ### 个人总结：`傅里叶级数本质上就是函数在各个基函数空间下的投影（内积）和。` 
 傅里叶级数三角函数形式： 将一个周期函数展开成有简单的周期函数例如三角函数组成的级数， 具体就是将周期$T(\frac{2\pi}{w})$的周期函数用一系列以T为周期的正弦函数$A_n\sin(n \omega x + \phi_n)$组成的级数来表示：
 $$
 \begin{align*}
-f(x) = A_0  + \sum_{n = 1}^{\infin}A_n \sin(nwx + \phi_n) \qquad (n= 1, 2, 3,\dots)     \tag{1}\\
+f(x) = A_0  + \sum_{n = 1}^{\infty}A_n \sin(nwx + \phi_n) \qquad (n= 1, 2, 3,\dots)     \tag{1}\\
 \end{align*}\\
 $$
 含义： 就是把一个比较复杂的周期函数分解成许多不同频率的简谐函数的叠加。
@@ -31,7 +59,15 @@ $$
     C_n &= \frac{1}{T}\int_0^{T}f(t)e^{-inwt}\text{d}t\\
 \end{align*}\\
 $$
-令 $h(t) = e^{inwt}  \Longrightarrow C_n =\frac{1}{T}\int_0^{T}f(t)\overline{h(x)}\text{d}t$ 可以看到，**原函数f(t)在复指数基函数$h(t)=e^{-inwt}$上的投影 = 原函数f(t)傅里叶展开的系数 $C_n$ ，这系数就组成了频域。 而$C_n$与各个复指数基函数h(t)组合就恢复了f(t). f(t)构成了时域。 通过复指数$h(t) = e^{inwt}$实现频域到时域的双向转换**  
+非周期函数傅里叶展开：
+$$
+\begin{align*}
+    f(t) &=\frac{1}{2\pi}\int_{-\infty}^{+\infty}[\int_{-\infty}^{+\infty}f(t)e^{-iwt}\text{d}t]e^{iwt}\text{d}w\\
+    F(w) &= \int_{-\infty}^{+\infty}f(t)e^{-iwt}\text{d}t \\
+    f(t) & = \frac{1}{2\pi}\int_{-\infty}^{+\infty} F(w) \text{d}w\\
+\end{align*}\\
+$$
+令 $h(t) = e^{inwt}  \Longrightarrow C_n =\frac{1}{T}\int_0^{T}f(t)\overline{h(x)}\text{d}t$ 可以看到，**原函数f(t)在复指数基函数$h(t)=e^{-inwt}$上的投影 = 原函数f(t)傅里叶展开的系数 $C_n$ ，这系数就组成了频域。 而$C_n$与各个复指数基函数h(t)组合就恢复了f(t). f(t)构成了时域。 通过复指数$h(t) = e^{inwt}$实现频域到时域的双向转换**  , 非周期同理。 
 下面文章的各种分析证明都是对这个的解释。 (ps： 教科书使用的是x作为参数，个人喜欢t做为参数形式，这个不影响公式的表达)
 ![](./Image/Fourier_Transform.png)
 下图比较直观看到转换过程：
@@ -40,23 +76,6 @@ $$
 
 ### 1. 函数的正交性
 
-**正交含义**
-
-向量正交：
-$$\vec{A}\cdot \vec{B} = \sum_{x= 1}^{N}(a_n b_n)= a_1b_1+ a_2b_2 + a_3b_3+ \dotsb = 0$$
-
-周期为T函数正交：
-整数扩展到整个实数轴，累加就变成了积分, 两个函数在区间内相乘的积分等于0
-$$
-\begin{align*}
-    <f(x), g(x)>: = \frac{1}{T}\int_{0}^{T}f(x)g(x)\text{d}x = 0\\
-\end{align*}\\
-$$
-周期为T复函数正交:
-函数f(x)与函数g(x)的共轭函数在周期内内积为0 
-$$
-<f(x), g(x)>: = \frac{1}{T}\int_{0}^{T}f(x)\overline{g(x)}\text{d}x = 0\\
-$$
 
 **三角函数系集合：**
 $$
@@ -107,16 +126,16 @@ $$
 $$
 \begin{align*}
     f(x) &= f(x + 2 \pi) \qquad   (T = 2\pi)\\
-    & = \sum_{n = 0}^{\infin}A_n\sin(nx + \phi_n) \\
-    & = A_0 + \sum_{n = 1}^{\infin}A_n\sin(nx + \phi_n) \\
-    & =A_0 + \sum_{n = 1}^{\infin}[ A_n\sin(\phi)\cos(nx) + A_n\cos(\phi_n)\sin(nx)]\\
-    & = a_0 + \sum_{n= 1}^{\infin}(a_n\cos(nx) + b_n \sin(nx)) \tag{2} \\
+    & = \sum_{n = 0}^{\infty}A_n\sin(nx + \phi_n) \\
+    & = A_0 + \sum_{n = 1}^{\infty}A_n\sin(nx + \phi_n) \\
+    & =A_0 + \sum_{n = 1}^{\infty}[ A_n\sin(\phi)\cos(nx) + A_n\cos(\phi_n)\sin(nx)]\\
+    & = a_0 + \sum_{n= 1}^{\infty}(a_n\cos(nx) + b_n \sin(nx)) \tag{2} \\
 \end{align*}\\
 $$
 >备注：高数教科书中提供的是如下等式，但是原理都一样
 $$
 \begin{align*}
-    f(x) = \frac{a_0}{2} + \sum_{n= 0}^{\infin}(a_n \cos(nx) + b_n \sin(nx))  \tag{3}
+    f(x) = \frac{a_0}{2} + \sum_{n= 0}^{\infty}(a_n \cos(nx) + b_n \sin(nx))  \tag{3}
 \end{align*}\\
 $$
 
@@ -124,8 +143,8 @@ $$
 step 1: 找$a_0$ , 对等式(2)两边同时积分：
 $$
 \begin{align*}
-    \int_{-\pi}^{\pi}f(x)\text{d}x &= \int_{-\pi}^{\pi}a_0\text{d}x + \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} a_n \cos(nx)\text{d}x +  \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} b_n \sin(nx)\text{d}x \\
-    & = a_0 \int_{-\pi}^{\pi} \text{d}x + \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} a_n \cos(nx)\cos(0x)\text{d}x +  \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} b_n \sin(nx)\cos(0x)\text{d}x \\
+    \int_{-\pi}^{\pi}f(x)\text{d}x &= \int_{-\pi}^{\pi}a_0\text{d}x + \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} a_n \cos(nx)\text{d}x +  \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} b_n \sin(nx)\text{d}x \\
+    & = a_0 \int_{-\pi}^{\pi} \text{d}x + \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} a_n \cos(nx)\cos(0x)\text{d}x +  \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} b_n \sin(nx)\cos(0x)\text{d}x \\
     & = a_0 x\Big|_{-\pi}^{\pi} + 0 +0 \\
     & = 2\pi a_0 
 \end{align*}\\
@@ -143,11 +162,11 @@ $$
 step 2：找$a_n$, 对等式(2)两边, 乘以$cos(mx)$，再$\int_{-\pi}^{\pi}$积分
 $$
 \begin{align*}
-     \int_{-\pi}^{\pi}f(x)\cos(mx)\text{d}x &=  \int_{-\pi}^{\pi} a_0\cos(mx) \text{d}x + \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} a_n \cos(nx)\cos(mx)\text{d}x +  \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} b_n \sin(nx)\cos(mx)\text{d}x \\
-     & = \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} a_n \cos(nx)\cos(mx)\text{d}x  \\
+     \int_{-\pi}^{\pi}f(x)\cos(mx)\text{d}x &=  \int_{-\pi}^{\pi} a_0\cos(mx) \text{d}x + \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} a_n \cos(nx)\cos(mx)\text{d}x +  \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} b_n \sin(nx)\cos(mx)\text{d}x \\
+     & = \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} a_n \cos(nx)\cos(mx)\text{d}x  \\
 (当n \ne m) \qquad  & = 0 \\
-(当 n = m)\qquad & = \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin} a_n \cos(nx)\cos(nx)\text{d}x \\
-     & = a_n \int_{-\pi}^{\pi}\sum_{n= 1}^{\infin}\cos^2(nx)\text{d}x\\
+(当 n = m)\qquad & = \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty} a_n \cos(nx)\cos(nx)\text{d}x \\
+     & = a_n \int_{-\pi}^{\pi}\sum_{n= 1}^{\infty}\cos^2(nx)\text{d}x\\
     & = a_n \pi\\
 \end{align*}\\
 $$

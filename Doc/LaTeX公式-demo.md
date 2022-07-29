@@ -80,7 +80,7 @@ $$
 $$
 
 $$
-\cdots,\vdots,\ddots
+\cdots,\vdots,\ddots, \otimes 
 $$
 
 $$

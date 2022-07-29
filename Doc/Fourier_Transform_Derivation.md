@@ -67,24 +67,24 @@ $$
 
 
 ### 傅里叶变换 FT
-如果(2)式中$T = + \infin$即寻找一个非周期函数的变换 ，这就是傅里叶变换. 
+如果(2)式中$T = + \infty$即寻找一个非周期函数的变换 ，这就是傅里叶变换. 
 $$
-\lim_{T \rightarrow +\infin}f_T(t) = f(t)  \\
+\lim_{T \rightarrow +\infty}f_T(t) = f(t)  \\
 $$
 所以有:
 $$
-T \rightarrow + \infin  \Longrightarrow \omega = \frac{2\pi}{T} \rightarrow 0\\
-\sum_{-N}^{N}\Delta \omega  \Longrightarrow \int_{-\infin}^{+\infin}\text{d}\omega\\
+T \rightarrow + \infty  \Longrightarrow \omega = \frac{2\pi}{T} \rightarrow 0\\
+\sum_{-N}^{N}\Delta \omega  \Longrightarrow \int_{-\infty}^{+\infty}\text{d}\omega\\
 n\Delta \omega \Longrightarrow \omega\\
 $$
 $$
 \begin{align*}
-    f(t) &= \lim_{T \rightarrow + \infin}f_T(t) = \sum_{n = -N}^{N}[\frac{1}{T}\int_0^{T}f(t)e^{-inwt}\text{d}t]e^{inwt}\\
-    & =\sum_{n = -N}^{N}[\frac{w}{2\pi} \int_{-\infin}^{+\infty}f(t)e^{-inwt}\text{d}t ]e^{inwt}\\
-    &= \frac{1}{2\pi} \sum_{n = -N}^{N}[\int_{-\infin}^{+\infty}f(t)e^{-inwt}\text{d}t ]e^{inwt}w\\
-    &=\frac{1}{2\pi}\int_{-\infin}^{+\infty}[\int_{-\infin}^{+\infty}f(t)e^{-iwt}\text{d}t]e^{iwt}\text{d}w\\
-    F(w) &= \int_{-\infin}^{+\infty}f(t)e^{-iwt}\text{d}t  \tag{3}\\
-    f(t) & = \frac{1}{2\pi}\int_{-\infin}^{+\infty} F(w) \text{d}w\\
+    f(t) &= \lim_{T \rightarrow + \infty}f_T(t) = \sum_{n = -N}^{N}[\frac{1}{T}\int_0^{T}f(t)e^{-inwt}\text{d}t]e^{inwt}\\
+    & =\sum_{n = -N}^{N}[\frac{w}{2\pi} \int_{-\infty}^{+\infty}f(t)e^{-inwt}\text{d}t ]e^{inwt}\\
+    &= \frac{1}{2\pi} \sum_{n = -N}^{N}[\int_{-\infty}^{+\infty}f(t)e^{-inwt}\text{d}t ]e^{inwt}w\\
+    &=\frac{1}{2\pi}\int_{-\infty}^{+\infty}[\int_{-\infty}^{+\infty}f(t)e^{-iwt}\text{d}t]e^{iwt}\text{d}w\\
+    F(w) &= \int_{-\infty}^{+\infty}f(t)e^{-iwt}\text{d}t  \tag{3}\\
+    f(t) & = \frac{1}{2\pi}\int_{-\infty}^{+\infty} F(w) \text{d}w\\
 \end{align*}
 $$ 
 其中F(w)为傅里叶变换， f(t)为逆变换。至此就明白前面所说的：
