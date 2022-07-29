@@ -1,3 +1,4 @@
+#! https://zhuanlan.zhihu.com/p/545565243
 # 数值积分 Numerical Integration
 ### Overview
 * 在图形中，很多概念是通过积分形式来表达的。 In graphics, many quantities we’re interested in are naturally expressed as integrals (total brightness, total area, …) 
@@ -10,20 +11,6 @@ $\int_0^1\frac{1}{3}x^2\text{d}x = \left[x^3\right]_0^1 = 1$
   - sample the function at many points 
   - integral is approximated as weighted sum
   ![](./Image/Numerical_Integration.png)
-
-**generate samples of a discrete random variable (with a known PDF)**
-To randomly select an event, select $x_i$ if $P_{i-1}<\xi\le P_i$
-$P$ 是累计概率函数 $P_j=\sum_{i=1}^j p_i$
-$\xi$ 是均匀分布随机变量 $\in [0,1)$
-![](./Image/Culculate_Distribution_Function.png)
-**Sampling continuous random variables using the inversion method**
-Cumulative probability distribution function 
-$$
-P(x) = Pr(X < x)=\int_{-\infty}^xp(t)\ \text{d}t
-$$
-Construction of samples: solve for $x=P^{-1}(\xi)$ 
-  * eg: 
-    ![](./Image/Example_Quadratic_Distribution.png)
 
 ### 我们该去对什么求积呢？what are we integrating?
 **蒙特卡洛积分Monte Carlo Integration**
@@ -38,8 +25,8 @@ average value times size of domain
 - 随机变量$X \sim p(x)$概率密度函数PDF/[Probability density function](https://en.wikipedia.org/wiki/Probability_density_function):
   $$\begin{cases}
   \quad p(x) \ge 0 \, \\ 
-  \quad \int_{-\infty}^{\infty} p(x)\text{d}x = 1     
-  \end{cases}
+  \quad \int_{-\infty}^{\infty} p(x)\text{d}x = 1   \\  
+  \end{cases} \\
   $$
 - 期望: The average value that one obtains if repeatedly drawing samples from the random distribution.
   - 离散期望：$E[X] = \sum\limits_{i=0}\limits^{N} x_i \cdot p(x_i)$
@@ -48,14 +35,31 @@ average value times size of domain
 随机变量的属性 Properties of expectation：
 - 如果某个随机变量Y是随机变量X的函数：$Y=f(X)$
 - 期望的关系：$E[Y]=E[f(X)]=\int f(x) p(x) d x$
-- $$
-  \begin{align*}
-    V[Y] = E[Y^2] - E[Y]^2 \\
-    V[\sum_{i = 1}^{N}Y_i] = \sum_{i = 1}^{N}[Y_i] \\
-    V[aY] = a^2V[Y]
-  \end{align*}
-  $$
 
+方差属性 Property of Variance:
+$$
+\begin{align*}
+  & V[Y] = E[Y^2] - E[Y]^2 \\
+  & V[\sum_{i = 1}^{N}Y_i] = \sum_{i = 1}^{N}[Y_i] \\
+  & V[aY] = a^2V[Y] \\
+  & V[X] = \sum_{i =1}^NP_i(x_i - \sum_{j = 1}^{N}p_j x_j )^2 \\
+  & V[X] = \int_{\Omega} p(x)(x - \int_{\Omega}yp(y)\text{d}y)^2\text{d}x\\
+\end{align*}\\
+$$
+
+**generate samples of a discrete random variable (with a known PDF)**
+To randomly select an event, select $x_i$ if $P_{i-1}<\xi\le P_i$
+$P$ 是累计概率函数 $P_j=\sum_{i=1}^j p_i$
+$\xi$ 是均匀分布随机变量 $\in [0,1)$
+![](./Image/Culculate_Distribution_Function.png)
+**Sampling continuous random variables using the inversion method**
+Cumulative probability distribution function 
+$$
+P(x) = Pr(X < x)=\int_{-\infty}^xp(t)\ \text{d}t \\
+$$
+Construction of samples: solve for $x=P^{-1}(\xi)$ 
+  * eg: 
+    ![](./Image/Example_Quadratic_Distribution.png)
 
 **引入任意分布随机变量的蒙特卡洛积分方法**
 Monte Carlo Integral: 一种近似积分方法：
@@ -67,12 +71,12 @@ $$F_{N}=\frac{1}{N} \sum_{i=1}^{N} \frac{f\left(X_{i}\right)}{p\left(X_{i}\right
 证明：$$\int f(x) \mathrm{d} x=\frac{1}{N} \sum_{i=1}^{N} \frac{f\left(X_{i}\right)}{p\left(X_{i}\right)} \quad X_{i} \sim p(x)$$
 过程：
 $$
-\begin{align}
+\begin{align*}
 E[F_N] &= E\left[{\frac{1}{N}\sum\limits_{i=1}\limits^N\frac{f(X_i)}{p(X_i)}}\right] \\
         &= \frac{1}{N}\sum\limits_{i=1}\limits^N \, E\left[\frac{f(X_i)}{p(X_i)}\right]\\
         &= 1\cdot\int\frac{f(x)}{p(x)}p(x)\text{d}x\\
-        &=\int f(x)\text{d}x
-\end{align}
+        &=\int f(x)\text{d}x \\
+\end{align*}\\
 $$
 ==结论：蒙特卡洛随机变量的期望等于积分值==
 
@@ -82,21 +86,21 @@ $$
 定义：
 $$\sigma^2 = E[(X-\mu)^2] \quad or \quad  Var(X) = \frac{\sum(X-\mu)^2}{N}\\
   {\mu =\operatorname {E} [X]}\\
-  \operatorname{Var}(X) = E[X^2] - E[X]^2
+  \operatorname{Var}(X) = E[X^2] - E[X]^2 \\
 $$
 
 蒙特卡洛方法的方差：利用无偏估计可以通过样本方差来估计 $Q_N$的误差条(error bar)
 构造随机变量： $Y = \frac{f(X)}{p(X)}$
 备注： 其中推导使用了Property of Variance: $\sigma^2\left[ \sum\limits_{i=1}\limits^N Y_i\right] = \sum\limits_{i=1}\limits^N \sigma^2 \left[Y_i\right] $
 $$
-\begin{align}
+\begin{align*}
   \sigma^2[F_N] &=\sigma^2\left[ {\frac{1}{N}\sum\limits_{i=1}\limits^N\frac{f(X_i)}{p(X_i)}} \right] \\
   &= \frac{1}{N^2} \sum\limits_{i=1}\limits^N \sigma^2  \left[  \frac{f(X_i)}{p(X_i)} \right]  \\
   &= \frac{1}{N^2}\sum\limits_{i=1}\limits^N\sigma^2\left[Y_i\right]\\
   &= \frac{1}{N^2}\left(N \sigma^2[Y] \right)\\
   &= \frac{1}{N} \sigma^2[Y]\\
-  所以有：\sigma[F_N] = \frac{1}{\sqrt{N}\sigma[Y]}
-\end{align}
+  所以有：\sigma[F_N] = \frac{1}{\sqrt{N}}\sigma[Y]\\
+\end{align*}\\
 $$
 结论： 
 1. 蒙特卡洛估值不稳定来源于随机变量$Y$ 取值的不稳定，即在$Y = \frac{f(x_i)}{p_i}$中$\frac{f(x_i)}{p_i}$值越大，就会是Y的方差越大。 从而影响蒙特卡洛估值的准确度。  所以若p(x)的形状越接近f(x)，则有益于最终结果的收敛。这就是**重要性采样**的思想
@@ -105,14 +109,14 @@ $$
 ## 采样理论
 **prerequisite** : 
 雅可比行列式： 解决多重积分变量替换和多元随机变量坐标便换求概率密度的问题
-参考资料： [雅可比行列式3Blue1Brown](https://www.bilibili.com/video/BV18J41157X8?share_source=copy_web&vd_source=e84f3d79efba7dc72e6306f35613222e)
+参考资料： [雅可比行列式](https://www.bilibili.com/video/BV18J41157X8?share_source=copy_web&vd_source=e84f3d79efba7dc72e6306f35613222e)
 
 
 **The Inversion Method**
 逆变换方法采样： 用分布在[0,1]区间的均匀随机变量去采样随机分布变量，sample is uniform, probalility is nonuniform. 
 ![](./Image/Uniform_Sample_in_Circle.png)
-eg: 在`单位圆`的表面进行均匀采样。
-  1. 因为对这个圆进行均匀采样，所以==单位面积的采样数量是一样的，即PDF相等==: $ p(x, y) = 1/\pi $ (可以理解为： 采样概率 = 1/采样面积 )
+eg: 在`单位圆`的表面进行均匀采样。（Since we’re going to sample uniformly with respect to area）
+  1. 因为要对圆是进行均匀采样，即==单位面积的采样数量是一样的，即PDF相等==: $ p(x, y) = 1/\pi $ (可以理解为： 采样概率 = 1/采样面积 )
   2. 利用jacobian矩阵将圆从笛卡尔坐标转化到极坐标系:
    $$
    p(x,y) = p(T(r,\theta))= \frac{p(r, \theta)}{|J_T(r, \theta)|}\\
@@ -123,24 +127,24 @@ eg: 在`单位圆`的表面进行均匀采样。
     \begin{bmatrix}
     \cos\theta & -r\sin\theta  \\
     \sin\theta& r\cos\theta \\
-    \end{bmatrix} = r
+    \end{bmatrix} = r \\
    $$
   3. 所以有 $p(x, y) = rp(r, \theta) \Longrightarrow p(r, \theta) = r/\pi  $
   4. 求边缘概率密度： 
    $$
    \begin{align*}
     p(r) & = \int_0^{2\pi} p(r, \theta)\text{d}\theta = 2r  \\
-    p(\theta) & = \frac{p(r,\theta)}{p(r)} = \frac{1}{2\pi}
-   \end{align*}
+    p(\theta) & = \frac{p(r,\theta)}{p(r)} = \frac{1}{2\pi} \\
+   \end{align*}\\
    $$
   5. 求取累计概率分布： 
    $$
    P(r) = \int p(x)\text{d}r = r^2 \\
-   P(\theta) = \int p(\theta) \text{d} \theta = \frac{1}{2\pi}\theta
+   P(\theta) = \int p(\theta) \text{d} \theta = \frac{1}{2\pi}\theta \\
    $$
   6. 均匀随机分布变量 $\xi_1 \,,\xi_2$
   7. 逆采样方法代入(inverse method):
-   $$\quad \theta = 2\pi\xi_1 \quad \, r = \sqrt{\xi_2} $$
+   $$\quad \theta = 2\pi\xi_1 \quad \, r = \sqrt{\xi_2}\\$$
 
 **rejection sampling**
 参考资料：

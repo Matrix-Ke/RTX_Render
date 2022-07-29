@@ -64,7 +64,6 @@ CMakeCache.txt
 *.app
 
 # binaries files 
-*.png
 *.xml
 *.html
 
