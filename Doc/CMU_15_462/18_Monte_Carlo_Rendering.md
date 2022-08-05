@@ -1,5 +1,5 @@
 #! https://zhuanlan.zhihu.com/p/545566323
-# Monte Carlo Rendering
+# 蒙特卡洛渲染公式整理 Monte Carlo Rendering
 ### Photorealistic Rendering
 渲染一张真实感图片需要： 
 1. camera
@@ -38,9 +38,9 @@ $$
 * 在半球面均匀采样方向 How do we uniformly sample directions from the hemisphere?  
 ![](./Image/Sample_unit_hemisphere.png)
 
-* 使用Inversion Method采样,概率密度函数如下：Picking points on unit hemisphere：
+* 使用Inversion Method采样,概率密度函数PDF如下：Picking points on unit hemisphere：
 $$(\xi_1, \xi_2) = (\sqrt{1-\xi_1^2}\cos(2\pi\xi_2), \sqrt{1-\xi_1^2}\sin(2\pi\xi_2), \xi_1)$$ 
-推导如下：[参考上篇数值积中对圆的采样]
+推导如下：[参考上篇数值积分中对圆的采样](https://zhuanlan.zhihu.com/p/545565243)
 同时可以参考：《PBRT 13.6.1章节》
 ![](./Image/spherical_coordinates.png) ![](./Image/spherical_integrate.png)
 1. 由球面坐标转换$\text{d}\omega = \sin\theta \text{d}\theta\text{d}\phi$
@@ -53,7 +53,7 @@ $$(\xi_1, \xi_2) = (\sqrt{1-\xi_1^2}\cos(2\pi\xi_2), \sqrt{1-\xi_1^2}\sin(2\pi\x
    & p(\theta,\phi) =\frac{\sin\theta}{2\pi}\\
    \end{align*}\\
    $$
-4. Inverse Method(先求边缘概率密度函数, 再求累计概率密度，最后求取反函数):
+4. Inverse Method(先求边缘概率密度函数, 再求累计分布函数，最后求取反函数):
    $$
    \begin{align*}
    &p(\theta)=\sin\theta, P(\theta)=1-\cos\theta,  \Longrightarrow \theta =\cos^{-1}\xi_1(1-\xi_1 replace \xi_1)\\

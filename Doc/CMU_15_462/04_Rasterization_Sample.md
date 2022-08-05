@@ -1,4 +1,4 @@
-#! https://zhuanlan.zhihu.com/p/547513128
+#! https://zhuanlan.zhihu.com/p/549175616
 # 光栅化和采样
 
 **Prerequisite**
@@ -15,7 +15,7 @@ f(x) = \frac{A}{2} + \frac{2A\cos(tw)}{\pi} + \frac{2A\cos(3tw)}{3\pi} + \frac{2
 $$
 
 **Fourier Transform**
-作用： [图像傅里叶变换](https://zhuanlan.zhihu.com/p/99605178) 将信号从时域便换到频域
+作用： [图像傅里叶变换](https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf) 将信号从时域便换到频域
 Decomposes A Signal Into Frequencies
 ![](./Image/Fourier_Transform.png)
 输入一个时间t(有的也表示为x)的函数,输出一个频率函数
@@ -50,9 +50,68 @@ Higher Frequencies Need Faster Sampling
 
 
 
-### Rasterizing triangles
+### Rasterizing triangles 
+**光栅化过程**
 
-**采样**
+扫描线算法：(ps: 这是以前的方法，现代都是用GPU都是基于tiled base并行处理)
+MVP矩阵变换和viewport映射后（一般再vertex shader阶段处理），得到三角形顶点(顶点不仅仅位置信息，还包含其他属性如 颜色，UV坐标等。。。)对应的屏幕像素坐标。
+![Screen_Pixel_coordinate](./Image/Screen_Pixel_coordinate.png)
+
+使用Bresenham 画出两点之间的像素点，`保存两点之间新的像素点`，然后给新的像素点插值着色。
+  - Bresenham：eg $P1(8, 10), p2(1, 3)\Longrightarrow y = \frac{7}{8}x + 2, 125$ 
+  - Liner Interpolation: 在两点之间插值着色。 
+![](./Image/Rasterization_Triangle_edge.png)
+
+使用扫描线算法填充三角形
+  - 遍历x方向像素点，每次y轴相等的，按从左到右排序，保存在数组中.  ![ScaneLine_Algorithem](./Image/ScaneLine_Algorithem.png)
+  - 在y轴建立的数组中索引到对应x轴的像素点。 找到左边的端点和右边的端点的两个像素点，扫描填充像素![](./Image/ScaneLine_FillPixel.png)
+
+最终完成的光栅化三角形
+   ![Finally_rasterization](./Image/Finally_rasterization.png)
+
+**测试点是否在三角形内 Point_in_triangle_test**
+（ps：`判断测试算法对每个像素都是一样，可以在GPU上并行测试`）
+判断像素的中心坐标是不是在三角形内，从而决定是否需要进行下一步的像素着色（作为fragment Shader的输入）。
+
+方法——： 利用三角形内角和定理
+检查一个点是否在三角形中的一种常见方法是找到将点连接到三角形三个顶点中的每一个的向量，并将这些向量之间的角度相加。如果角度和为 2*pi，则该点在三角形内，否则不在。它可以工作，但速度很慢。
+
+方法二：同侧技术
+对于在三角形 ABC 内的点，它必须在 AB 下方、BC 左侧和 AC 右侧。如果其中任何一项测试失败，点就不再三角形内部。
+有多种方式：如下面的就是通过叉乘判断是否同方向。 
+```c++
+函数 SameSide(p1,p2, a,b)
+    cp1 = CrossProduct(ba, p1-a)
+    cp2 = CrossProduct(ba, p2-a)
+    如果 DotProduct(cp1, cp2) >= 0 则返回 true
+    否则返回假
+函数 PointInTriangle(p, a,b,c)
+    如果 SameSide(p,a,b,c) 和 SameSide(p,b,a,c)
+        和 SameSide(p,c, a,b) 然后返回 true
+    否则返回假
+```
+
+另一种就是三条边分别建立直线方程：
+$$Ax + bx +c = 0\\$$ 
+将P点带入其中，如果方程小于0，就在左侧，大于0，就在右侧,**这里的直线是有方向性的**！当三条边都满足在左侧的时候就在内部。
+![](./Image/Point_in_triangle_test.png) ![](./Image/Point_in_triangle_test2.png)
+
+方法三： [利用向量计算重心坐标](https://youtu.be/HYAgJN3x4GA)
+$$
+\vec{AP} = w_1 \vec{AB} + w_2\vec{AC} \qquad   (w_1 \ge 0, w_2 \ge 0, (w_1 +w_2) \le 1)\\
+$$
+
+**tiled triangle traversal (Tiled based)**
+
+在每个tile 内并行计算测试算法，现代GPU的性能瓶颈一般在内存读写上，在计算上并不会特别消耗。
+![](./Image/tiled_triangle_traversal.png)
+
+
+
+**采样和重建**
+参考[Games101 采样理论知识补充](https://zhuanlan.zhihu.com/p/547407165)
+采样：将连续信号转变为离散信号的过程， 重建：将采样的离散信号还原到连续信号中。
+
 ![](./Image/Convolution_Theorem.png)
 光栅化: 一个像素点对应一个坐标点，对这个坐标点采样，判断它在不在三角形里面，
 采样： 本质是重复频域（频率）上的内容。 Repeating Frequency Contents
@@ -72,7 +131,7 @@ Higher Frequencies Need Faster Sampling
   -  `采样频率越大体现在在时域上就是T越小， 因此频域的f = 1 /T 就会大， 原始信号频率f进行卷积操作（也就是复制粘贴信号）越不容易发生混叠。 这样就能避免走样了`
 - Option 2: Filtering
   - `去掉一些频率的信号Getting rid of certain frequency contents` 
-  - 采样之前去掉图片中高频，可以参考之前写的[《Games101 采样理论知识补充》](https://zhuanlan.zhihu.com/p/547407165)， 于是就不会有重叠了：
+  - 采样之前去掉图片中高频，可以参考之前写的[Games101 采样理论知识补充](https://zhuanlan.zhihu.com/p/547407165)于是就不会有重叠了：
   - 这里抗锯齿可以看作 = filtering = averaging （可以看作一种低通滤波器）
   
 
@@ -94,7 +153,6 @@ Higher Frequencies Need Faster Sampling
 - Wagon Wheel Illusion (False Motion)：倒着转的轮子
   - `采样速度跟不上样本变化速度`
   - 时间上Signals are changing too fast (high frequency), but sampled too slowly
-- ……
 
 
 **Antialiasing Today**
@@ -141,8 +199,12 @@ Z-buffer：对每个像素多存一个深度
 
 
 
-参考资料：
+**参考资料：**
 
 [形象展示傅里叶变换]: 可以参考我渲染数学篇的傅里叶变换内容。
 
 [games101_06_Reasterization](https://www.bilibili.com/video/BV1X7411F744?p=6&share_source=copy_web&vd_source=e84f3d79efba7dc72e6306f35613222e)
+
+[Rasterizer Algorithm Explanation] (https://youtu.be/t7Ztio8cwqM)
+
+[Point_in_triangle_test](https://blackpawn.com/texts/pointinpoly/)

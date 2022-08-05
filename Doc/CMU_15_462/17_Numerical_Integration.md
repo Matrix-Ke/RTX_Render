@@ -1,5 +1,6 @@
 #! https://zhuanlan.zhihu.com/p/545565243
-# 数值积分 Numerical Integration
+# 蒙特卡洛数值积分 Numerical Integration
+数值积分用于求解渲染方程
 ### Overview
 * 在图形中，很多概念是通过积分形式来表达的。 In graphics, many quantities we’re interested in are naturally expressed as integrals (total brightness, total area, …) 
 * For very, very simple integrals, we can compute the solution analytically eg: 
@@ -89,8 +90,10 @@ $$\sigma^2 = E[(X-\mu)^2] \quad or \quad  Var(X) = \frac{\sum(X-\mu)^2}{N}\\
   \operatorname{Var}(X) = E[X^2] - E[X]^2 \\
 $$
 
+**蒙特卡洛方法的方差**
 蒙特卡洛方法的方差：利用无偏估计可以通过样本方差来估计 $Q_N$的误差条(error bar)
 构造随机变量： $Y = \frac{f(X)}{p(X)}$
+
 备注： 其中推导使用了Property of Variance: $\sigma^2\left[ \sum\limits_{i=1}\limits^N Y_i\right] = \sum\limits_{i=1}\limits^N \sigma^2 \left[Y_i\right] $
 $$
 \begin{align*}

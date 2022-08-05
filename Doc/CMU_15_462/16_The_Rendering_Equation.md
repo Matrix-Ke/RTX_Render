@@ -1,6 +1,7 @@
 #! https://zhuanlan.zhihu.com/p/545564030
-# The Rendering Equation
-### prerequisite 理解radiance和irradiance
+# 从BRDF散射模型到渲染方程 The Rendering Equation
+### prerequisite 
+理解radiance和irradiance
 什么是irradiance ？
 总结：
   - radiance 可以理解为一条光线所携带的能量
@@ -33,17 +34,20 @@
 * 渲染器用光线路径来计算radiance  Renderer measures radiance along a ray
 ![](./Image/radiance_traveling_in_Ray.png)
 
-### How does refection of light affect the outgoing radiance?
+### 光的反射如何影响出射的辐射度 How does refection of light affect the outgoing radiance?
 
 Refection models
 ![](./Image/Reflection_models.png)
-* 反射定义： 光线进入物体表面在相同一侧离开，且频率不改变（简单理解就是颜色不变）。 Refection is the process by which light incident on a surface interacts with the surface such that it leaves on the incident (same) side without change in frequency
+* 反射定义： 光线进入物体表面在相同一侧离开，且频率不改变。 Refection is the process by which light incident on a surface interacts with the surface such that it leaves on the incident (same) side without change in frequency
 * 选择什么样的反射方程决定了物理表面什么颜色
 $$f_r(\mathbf{p}, \omega_i\to\omega_o)$$
-Some basic refection functions
+
+基础的反射函数 Some basic refection functions
+**`需要找到一个合适的光线传输模型来表现这些反射现象。`**
 ![](./Image/Basic_reflection_models.png)
 
-### 如何建立散射模型
+### 根据这些反射函数建立散射模型来
+
 Models of Scattering
 1. 微表面：  Photon_on_surface
    ![](./Image/Photon_on_surface.png)
@@ -56,7 +60,12 @@ Scattering off a surface:
 * Encodes behavior of light that “bounces off” surface
 * Given incoming direction ωi, how much light gets scattered in any given outgoing direction ωo.
 * 表面散射分布描述： $f_r( \omega_i\to\omega_o)$
-* **可以理解brdf为一束入射光的投射到表面$\Delta\mathbf{p}$点光通量与该点某一个观察方向的出射光光通量的比值，对一束入射光的所有比值加总（积分），由能量守恒可知必然$\le1$**
+由以上前提引出brdf概念
+
+**BRDF有如下的两个重要性质**
+* Helmholtz互异性： 就是交互入射方向和反射方向，BRDF计算出来的结果是一致的 $f(p, w_i) = f(p, w_o)$
+* 能量守恒
+* **可以理解brdf为一束入射光的投射到表面$\Delta\mathbf{p}$点光通量与该点某一个观察方向的出射光光通量的比值，BRDF同时满足Helmholtz互异性，对一束入射光的所有反射光比值加总（积分），由能量守恒可知必然$\le1$**
 $$
 f_r(\omega_i\to\omega_o)\ge0\\
 f_r(\omega_i\to\omega_o)=f_r(\omega_o\to\omega_i)\\
@@ -97,11 +106,11 @@ Example: perfect specular refection
 * Specular refection BRDF
 $$L_o(\theta_o,\phi_o)=L_i(\theta_i,\phi_i)\\$$
 $$
-f_r(\theta_i,\phi_i;\theta_o,\phi_o)=\left\{
-\begin{array}{ccl}
+f_r(\theta_i,\phi_i;\theta_o,\phi_o)=
+\begin{cases}
 \frac{1}{\cos\theta_i}       &      & {\theta_o=\theta_i \text{ and }\phi_i=\phi_o\pm\pi}\\
 0     &      & \text{otherwise}\\
-\end{array} \right \\
+\end{cases} \\
 $$
 
 **TransmissionLight**
