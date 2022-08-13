@@ -48,13 +48,15 @@ $$
 \end{align*}\\
 $$
 
+### 逆变换采样方法 inversion method
+
 **generate samples of a discrete random variable (with a known PDF)**
 To randomly select an event, select $x_i$ if $P_{i-1}<\xi\le P_i$
 $P$ 是累计概率函数 $P_j=\sum_{i=1}^j p_i$
 $\xi$ 是均匀分布随机变量 $\in [0,1)$
 ![](./Image/Culculate_Distribution_Function.png)
 **Sampling continuous random variables using the inversion method**
-Cumulative probability distribution function 
+Cumulative probability distribution function $X$是代表随机变量
 $$
 P(x) = Pr(X < x)=\int_{-\infty}^xp(t)\ \text{d}t \\
 $$
@@ -117,37 +119,7 @@ $$
 
 **The Inversion Method**
 逆变换方法采样： 用分布在[0,1]区间的均匀随机变量去采样随机分布变量，sample is uniform, probalility is nonuniform. 
-![](./Image/Uniform_Sample_in_Circle.png)
-eg: 在`单位圆`的表面进行均匀采样。（Since we’re going to sample uniformly with respect to area）
-  1. 因为要对圆是进行均匀采样，即==单位面积的采样数量是一样的，即PDF相等==: $ p(x, y) = 1/\pi $ (可以理解为： 采样概率 = 1/采样面积 )
-  2. 利用jacobian矩阵将圆从笛卡尔坐标转化到极坐标系:
-   $$
-   p(x,y) = p(T(r,\theta))= \frac{p(r, \theta)}{|J_T(r, \theta)|}\\
-   J_T = \begin{bmatrix}
-    \frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta}  \\
-    \frac{\partial y}{\partial \theta}& \frac{\partial y}{\partial \theta} \\
-    \end{bmatrix} = 
-    \begin{bmatrix}
-    \cos\theta & -r\sin\theta  \\
-    \sin\theta& r\cos\theta \\
-    \end{bmatrix} = r \\
-   $$
-  3. 所以有 $p(x, y) = rp(r, \theta) \Longrightarrow p(r, \theta) = r/\pi  $
-  4. 求边缘概率密度： 
-   $$
-   \begin{align*}
-    p(r) & = \int_0^{2\pi} p(r, \theta)\text{d}\theta = 2r  \\
-    p(\theta) & = \frac{p(r,\theta)}{p(r)} = \frac{1}{2\pi} \\
-   \end{align*}\\
-   $$
-  5. 求取累计概率分布： 
-   $$
-   P(r) = \int p(x)\text{d}r = r^2 \\
-   P(\theta) = \int p(\theta) \text{d} \theta = \frac{1}{2\pi}\theta \\
-   $$
-  6. 均匀随机分布变量 $\xi_1 \,,\xi_2$
-  7. 逆采样方法代入(inverse method):
-   $$\quad \theta = 2\pi\xi_1 \quad \, r = \sqrt{\xi_2}\\$$
+
 
 **rejection sampling**
 参考资料：

@@ -63,7 +63,7 @@ Scattering off a surface:
 由以上前提引出brdf概念
 
 **BRDF有如下的两个重要性质**
-* Helmholtz互异性： 就是交互入射方向和反射方向，BRDF计算出来的结果是一致的 $f(p, w_i) = f(p, w_o)$
+* Helmholtz互易性： 就是交互入射方向和反射方向，BRDF计算出来的结果是一致的 $f(p, w_i) = f(p, w_o)$
 * 能量守恒
 * **可以理解brdf为一束入射光的投射到表面$\Delta\mathbf{p}$点光通量与该点某一个观察方向的出射光光通量的比值，BRDF同时满足Helmholtz互异性，对一束入射光的所有反射光比值加总（积分），由能量守恒可知必然$\le1$**
 $$

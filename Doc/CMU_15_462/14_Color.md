@@ -25,7 +25,7 @@ Color 颜色：是人的一种感知，不是光线的一种根本属性 a pheno
   - 不同的人的视锥细胞分布大不一样 Fraction of Three Cone Cell Types Varies Widely
   - Three types of cones S, M, and L (corresponding to peak response at short, medium, and long wavelengths), each with different spectral sensitivity
 
-# Spectral response of cones
+# 视锥细胞的光谱响应 Spectral response of cones
 
 Spectral Response of Human Cone Cells: Three types of cones: S, M, and L cones (corresponding to peak response at short, medium, and long wavelengths)
 ![不同视锥细胞对不同波长的光的响应曲线](./Image/Spectral_Response_of_Cone_Cells.png)
@@ -116,7 +116,7 @@ Standardized RGB (sRGB)
 - widely adopted today
 - gamut (⾊域) is limited
 
-## A Universal Color Space: CIE XYZ
+## A Universal Color Space: [CIE XYZ](https://www.pbr-book.org/3ed-2018/Color_and_Radiometry/The_SampledSpectrum_Class#XYZColor)
 
 **CIE XYZ color matching functions**
 ![](Image/XYZ_color_matching_functions.png)
@@ -126,7 +126,7 @@ Imaginary set of standard color primaries X, Y, Z
 - **Y is luminance** (brightness regardless of color) (亮度)
 
 为何如此设计？
-
+- 在XYZ表色系统中  与亮度（luminance）密切相关。由于在相同光照强度的条件下人眼感受到的绿光要比红光和蓝光要更亮，而  曲线与人眼中感受中波即绿光的视锥细胞对颜色反应的曲线相近似。因此，基于这一事实，CIE定义  为亮度。
 - Matching functions are strictly positive 没有负数
 - Span all observable colors 覆盖所有可见光
 

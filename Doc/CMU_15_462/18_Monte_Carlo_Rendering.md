@@ -35,40 +35,9 @@ $$
 $$
 
 ### uniform sampling
-* 在半球面均匀采样方向 How do we uniformly sample directions from the hemisphere?  
-![](./Image/Sample_unit_hemisphere.png)
+在半球上的均匀采样参考[多维空间下的均匀采样方法](https://zhuanlan.zhihu.com/p/552773776)
 
-* 使用Inversion Method采样,概率密度函数PDF如下：Picking points on unit hemisphere：
-$$(\xi_1, \xi_2) = (\sqrt{1-\xi_1^2}\cos(2\pi\xi_2), \sqrt{1-\xi_1^2}\sin(2\pi\xi_2), \xi_1)$$ 
-推导如下：[参考上篇数值积分中对圆的采样](https://zhuanlan.zhihu.com/p/545565243)
-同时可以参考：《PBRT 13.6.1章节》
-![](./Image/spherical_coordinates.png) ![](./Image/spherical_integrate.png)
-1. 由球面坐标转换$\text{d}\omega = \sin\theta \text{d}\theta\text{d}\phi$
-2. 在半球表面进行均匀采样所以有$p(\omega) = 1/2\pi$
-3. 由分布函数:
-   $$
-   \begin{align*}
-   & P_r \{\omega \in \Omega \} = \int_\Omega p(\omega)\text{d}\omega \Longrightarrow p(θ , φ)\text{d}\theta\text{d}\phi = p(\omega)\text{d}\omega\\
-   & p(θ , φ) = \sin\theta p(\omega) \\
-   & p(\theta,\phi) =\frac{\sin\theta}{2\pi}\\
-   \end{align*}\\
-   $$
-4. Inverse Method(先求边缘概率密度函数, 再求累计分布函数，最后求取反函数):
-   $$
-   \begin{align*}
-   &p(\theta)=\sin\theta, P(\theta)=1-\cos\theta,  \Longrightarrow \theta =\cos^{-1}\xi_1(1-\xi_1 replace \xi_1)\\
-   &p(\phi)=\frac{1}{2\pi}, \quad P(\phi)=\frac{\phi}{2\pi}, \Longrightarrow \phi=2\pi\xi_2\\
-   \end{align*}\\
-   $$
-5. 转到笛卡尔坐标系得到如下结果：
-   $$
-   \begin{align*}
-   &x= \sin\theta \cos \phi  = \sqrt{1- \xi^2} \cos(2\pi\xi_2)\\
-   &y = \sin \theta \sin\phi =  \sqrt{1- \xi^2} \sin(2\pi\xi_2) \\
-   &z = \cos\theta = \phi_1 \\
-   \end{align*}\\
-   $$
- 
+### 光照计算
 **直接光均匀采样Direct lighting—uniform sampling**
 采样算法：
 - Given surface point $\mathbf{p}​$ 
