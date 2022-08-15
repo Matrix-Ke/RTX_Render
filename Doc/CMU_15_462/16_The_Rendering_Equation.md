@@ -1,5 +1,5 @@
 #! https://zhuanlan.zhihu.com/p/545564030
-# 从BRDF散射模型到渲染方程 The Rendering Equation
+# 从BSDF散射模型建立渲染方程 The Rendering Equation
 ### prerequisite 
 理解radiance和irradiance
 什么是irradiance ？
@@ -12,7 +12,10 @@
 ![](./Image/Sphere_Intgration.png)
 * **Confusing** : this $\cos\theta$  has to do with parameterization of sphere, not Lambert’s law
 * 理解兰伯特$\cos{\theta}$ 与 球面积分$\cos{\theta}$的不同tale of two consines
+* 参考[PBRT Working_with_Radiometric_Integrals](https://www.pbr-book.org/3ed-2018/Color_and_Radiometry/Working_with_Radiometric_Integrals)
 ![](./Image/Lambertlaw_VS_SphereInteration.png)
+![](./Image/Irradiance_from_quadrilateral.png)
+
 
 ### 如何使用radince生成图像
 **The rendering Equation**
@@ -46,7 +49,17 @@ $$f_r(\mathbf{p}, \omega_i\to\omega_o)$$
 **`需要找到一个合适的光线传输模型来表现这些反射现象。`**
 ![](./Image/Basic_reflection_models.png)
 
-### 根据这些反射函数建立散射模型来
+### 根据这些反射函数建立反射模型来
+
+**对物体反射现象建立反射模型：**
+
+* 测量数据：许多真实世界表面的反射分布特性已在实验室进行测量。此类数据可以直接以表格形式使用或用于计算一组基函数的系数。
+* 现象学模型：试图描述真实世界表面的定性属性的方程可以非常有效地模仿它们。这些类型的 BSDF 可以特别容易使用，因为它们往往具有修改其行为的直观参数（例如，“粗糙度”）。
+* 模拟：有时，关于表面成分的低级信息是已知的。例如，可能知道油漆由悬浮在介质中的某种平均尺寸的有色颗粒组成，或者特定织物由两种类型的线组成，每种线都具有已知的反射特性。在这些情况下，可以模拟来自微观几何形状的光散射以生成反射数据。这种模拟可以在渲染期间完成，也可以作为预处理完成，之后它可以适合一组基函数以在渲染期间使用。
+* 物理（波）光学：一些反射模型是使用光的详细模型得出的，将其视为波并计算麦克斯韦方程组的解，以找出它如何从具有已知特性的表面散射。然而，这些模型的计算成本往往很高，并且通常并不比基于几何光学的模型用于渲染应用更准确。
+* 几何光学：与模拟方法一样，如果表面的低水平散射和几何特性已知，则有时可以直接从这些描述中推导出封闭形式的反射模型。几何光学使模拟光与表面的相互作用更容易处理，因为可以忽略偏振等复杂的波效应。
+
+BSDF: 向反射分布函数（BRDF）抽象来描述表面的光反射，BTDF 描述表面的透射,BSDF 包含这两种效果。
 
 Models of Scattering
 1. 微表面：  Photon_on_surface
@@ -80,7 +93,7 @@ f_r(\omega_i\to\omega_o) = \frac{\text{d}L_o(\omega_o)}{\text{d}E_i(\omega_i)}
 =\frac{\text{d}L_o(\omega_o)}{\text{d}L_i(\omega_i)\cos\theta}\left[\frac{1}{sr}\right]\\
 $$
 
-Example: Lambertian refection
+**Lambertian Reflection**
 * Assume light is equally likely to be refected in each output direction
 ![](./Image/Lambertian_refection.png)
 * 由于各个出射光一样：$ f_r=f_r(\mathbf{p}, \omega_i\to\omega_o)$
@@ -101,24 +114,33 @@ $$
 0\le\rho(\mathbf{p})\le 1\\
 $$
 
-Example: perfect specular refection
+**perfect specular refection**
+
 ![](./image/specular_reflection.png)
 * Specular refection BRDF
 $$L_o(\theta_o,\phi_o)=L_i(\theta_i,\phi_i)\\$$
+
+菲涅耳方程给出了反射光的比例$F_r(\omega_r)$, 使用Dirac delta 函数`将入射方向限制为镜面反射方向`: 
+$$f_{\mathrm{r}}(\mathrm{p},\omega_{0},\omega_{\mathrm{i}})=F_{\mathrm{r}}(\omega_{\mathrm{r}}){\frac{\delta(\omega_{\mathrm{i}}-\omega_{\mathrm{r}})}{|\cos\theta_{\mathrm{r}}|}}  \tag{1} \\$$
+也可以写成这样：
 $$
 f_r(\theta_i,\phi_i;\theta_o,\phi_o)=
-\begin{cases}
-\frac{1}{\cos\theta_i}       &      & {\theta_o=\theta_i \text{ and }\phi_i=\phi_o\pm\pi}\\
-0     &      & \text{otherwise}\\
-\end{cases} \\
+\begin{cases} 
+F_r(\omega_r)\frac{1}{\cos\theta_i}       &      & {\theta_o=\theta_i \text{ and }\phi_i=\phi_o\pm\pi}\\
+0     &      & \text{otherwise} \\
+\end{cases} \\ 
 $$
 
 **TransmissionLight**
+
 * 光穿过介质 refracts:Transmitted angle depends on relative index of refraction of material ray is leaving/entering
-* 折射 Snell`s  Law  
+* 折射 Snell`s  Law ： 折射率随光的波长而变化。因此，入射光通常在两种不同介质之间的边界沿多个方向散射，这种效应称为色散。
+* eg: 人眼视角 Optical manhole
+![](./Image/optical_manhole.png)
 ![](./Image/snells_law.png)
+公式具体推导见[SpecularTransmission](https://www.pbr-book.org/3ed-2018/Reflection_Models/Specular_Reflection_and_Transmission#SpecularTransmission)
 $$
-\begin{align*}{ccl}
+\begin{align*}
 \eta_i\sin\theta_i
 &=\eta_t\sin\theta_t\\
 \cos\theta_t
@@ -127,14 +149,71 @@ $$
 &=\sqrt{1-(\frac{n_i}{n_t})^2(1-\cos^2\theta_i)}  &\left(1-(\frac{n_i}{n_t})^2(1-\cos^2\theta_i)<0)\right)
 \end{align*}\\
 $$
-eg: 人眼视角 Optical manhole
-![](./Image/optical_manhole.png)
-* 菲涅尔反射 Fresnel reflection:
-大部分材质都随着视角增加而反射增加 Many real materials: refectance increases with viewing angle
+
+
+### 菲涅尔反射 Fresnel reflection
+
+除了反射和透射方向之外，还需要计算反射或透射的入射光的比例。对于物理上准确的反射或折射，这些项与方向有关，不能通过恒定的每表面缩放量来捕获。`菲涅耳方程描述了从表面反射的光量；它们是麦克斯韦方程在光滑表面上的解。`
+
+**菲涅耳方程**： 给定折射率和入射光线与表面法线的夹角，菲涅耳方程指定了材料对入射照明的两种不同偏振态的相应反射率。因为偏振的视觉效果在大多数环境中是有限的，所以在 pbrt中会做出一个常见的假设，即光是非偏振的；也就是说，它相对于光波是随机定向的。有了这个简化的假设，菲涅耳反射率是平行和垂直偏振项的平方的平均值。（关于光的偏振可以观看[光的偏振：圆偏振，线偏振，非偏振光](https://www.bilibili.com/video/BV1Lt411t7Lh?share_source=copy_web&vd_source=e84f3d79efba7dc72e6306f35613222e)）
+
+为了`计算两种(two dielectric media)电介质界面处的菲涅耳反射率，需要知道两种介质的折射率`
+$$
+r_{\parallel}=\frac{\eta_{\mathrm{t}}\cos\theta_{\mathrm{i}}-\eta_{\mathrm{i}}\cos\theta_{\mathrm{t}}}{\eta_{\mathrm{t}}\cos\theta_{\mathrm{i}}+\eta_{\mathrm{i}}\cos\theta_{\mathrm{t}}}\\
+\\[10pt]
+r_{\perp}=\frac{\eta_{\mathrm{i}}\cos\theta_{\mathrm{i}}-\eta_{\mathrm{t}}\cos\theta_{\mathrm{t}}}{\eta_{\mathrm{i}}\cos\theta_{\mathrm{i}}+\eta_{\mathrm{t}}\cos\theta_{\mathrm{t}}}\\
+$$
+其中$r_{\parallel}$是平行偏振光的菲涅耳反射率，$r_{\perp}$是垂直偏振光的反射率， $\eta_i$是入射和$\eta_t$透射介质的折射率，$\omega_i$和$\omega_t$是入射和透射方向.
+
+**对于非偏振光，菲涅耳反射率**为:
+$$F_{\mathrm{r}}=\frac{1}{2}(r_{\parallel}^{2}+r_{\perp}^{2})\\$$
+
+利用菲涅尔方程，我们就可以根据不同的反射率画出$F_{\mathrm{r}}$与$\theta_i$的对应关系图,可以看到：
+* 大部分电介质（Dielectric）都随着视角增加而反射增加 Many real materials: refectance increases with viewing angle
+* conductor导体（比如铜镜），可以发现即使光线垂直于导体表面，但是依旧有90%的光被反射。
 ![](./Image/Fresnel_reflection.png)
+![常见材质F0](./Image/Material_Fresnel_F0_Value.png)
 Example : Snell + Fresnel
 ![](./Image/Snell_and_Fresnel.png)
 
+
+### 透射分布函数 BTDF 
+现在将推导出镜面传输的BTDF。Snell`s Law斯涅尔定律是推导的基础。斯涅尔定律不仅给出了透射光线的方向，而且还可以用来表明当光线在具有不同折射率的介质之间传播时，沿光线的辐射度会发生变化。
+
+![具有不同折射率的介质之间边界处的透射辐射量由两个折射率的平方比缩放。直观地说，这可以理解为辐射的差分立体角由于传输而被压缩或扩大的结果](./Image/Radiance_change_at_refraction.png)
+
+用$\tau$来表示由菲涅耳方程给出的传输到出射方向的入射能量分数，所以$\tau = 1 - F_r(\omega_i)$。那么传输的微分光通量为
+$$\mathrm{d}\Phi_{\mathrm{o}}=\tau\mathrm{d}\Phi_{\mathrm{i}}\\$$
+
+
+如果使用radiance的定义$L=\frac{\mathrm{d}\Phi}{\mathrm{d}\omega\,\mathrm{d}A^{\perp}}$，有:
+$$
+L_o\cos \theta_o \text{d}A\text{d}\omega_o = \tau(L_i\cos \theta_i \text{d}A\text{d}\omega_i)
+$$
+
+将立体角展开为球面角$\text{d}\omega =\sin \theta\ \text{d}\theta \text{d}\phi$，(具体公式推导见[从辐射度量学理解BRDF: Differential solid angle](https://zhuanlan.zhihu.com/p/549572824))有:
+$$
+L_{\mathrm{o}}\cos\theta_{\mathrm{o}}\,\mathrm{d}A\sin\theta_{\mathrm{o}}\,\mathrm{d}\theta_{\mathrm{o}}\,\mathrm{d}\phi_{\mathrm{o}}=\tau L_{\mathrm{i}}\cos\theta_{\mathrm{i}}\,\mathrm{d}A\sin\theta_{\mathrm{i}}\,\mathrm{d}\theta_{\mathrm{i}}\,\mathrm{d}\phi_{\mathrm{i}} \tag{2}\\
+$$
+
+现在可以根据Snell Law 给出关于$\theta$的关系：
+$$\eta_{o}\;\mathrm{cos}\,\theta_{o}\;\mathrm{d}\theta_{o}\,=\,\eta_{\mathrm{i}}\;\mathrm{cos}\,\theta_{\mathrm{i}}\,\mathrm{d}\theta_{\mathrm{i}}\\$$
+
+重新排列术语，有:
+$$\frac{\cos\theta_{\mathrm{o}}\,\mathrm{d}\theta_{\mathrm{o}}}{\cos\theta_{\mathrm{i}}\,\mathrm{d}\theta_{\mathrm{i}}}\,=\,\frac{\eta_{\mathrm{i}}}{\eta_{\mathrm{o}}}\\$$
+
+将这个关系和斯涅尔定律代入方程（2），然后化简，有
+$$L_{\circ}\,\eta_{\mathrm{i}}^{2}\,\mathrm{d}\phi_{\circ}=\tau L_{\mathrm{i}}\,\eta_{\circ}^{2}\,\mathrm{d}\phi_{\mathrm{i}}\\$$
+
+因为$\phi_{\mathrm{i}}=\phi_{\mathrm{o}}+\pi$因此$\mathrm{d}\phi_{\mathrm{i}}=\mathrm{d}\phi_{\mathrm{o}}$ ，有最终的关系： 
+$$L_{\mathrm{o}}=\tau L_{\mathrm{i}}\frac{\eta_{\mathrm{o}}^{2}}{\eta_{\mathrm{i}}^{2}}\\$$
+
+与镜面反射的BRDF（1）公式一样，需要分出$\theta_i$项来获得正确的BTDF镜面透射 ： 
+$$f_{\mathrm{r}}(\omega_{0},\omega_{\mathrm{i}})=\frac{\eta_{0}^{2}}{\eta_{\mathrm{i}}^{2}}(1-F_{\mathrm{r}}(\omega_{\mathrm{i}}))\frac{\delta(\omega_{\mathrm{i}}-\mathrm{T}(\omega_{0},{\bf n}))}{|\mathrm{cos}\,\theta_{\mathrm{i}}|}\\$$
+
+> $T(\omega_o, n)$是镜面透射方向$\omega_o$穿过与表面法线n的界面产生的镜面透射矢量
+
+### 其他光学现象
 **各项异性 Anisotropic refection**
 Refection depends on azimuthal angle$\phi$
 ![](./Image/anisotropic_reflection.png)
@@ -204,6 +283,11 @@ Path tracing : 拆解递归无限光线为逐束递归光线求解，take advant
 * 采用俄罗斯轮盘赌算法：决定要不要继续，避免无线递归下去。Terminate paths with Russian roulette
 ![](./Image/recursively_evaluate_rendering_equation.png)
 
+
+
+**参考资料**
+
+1. [PBRT Reflection_Models](https://www.pbr-book.org/3ed-2018/Reflection_Models)
 
 
 

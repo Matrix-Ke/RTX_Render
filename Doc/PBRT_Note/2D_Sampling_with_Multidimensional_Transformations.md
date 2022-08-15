@@ -1,8 +1,9 @@
 #! https://zhuanlan.zhihu.com/p/552773776
 # 多维空间下的均匀采样方法
 
-**参考资料:**
-1. [《PBRT 13.6》](https://www.pbr-book.org/3ed-2018/Monte_Carlo_Integration/2D_Sampling_with_Multidimensional_Transformations#)
+**前言**
+
+一个特别重要的随机变量是典型的均匀随机变量，该变量以相等的概率取其域中的所有值。由于两个原因均匀随机变量很重要: 其一，在软件中使用这种分布很容易生成一个变量——大多数运行时库都有一个伪随机数生成器可以做到这一点。 其次，正如我们稍后将展示的，可以通过首先从`规范均匀随机变量开始并应用适当的变换来从任意分布生成样本`。
 
 
 ### 不同分布函数之间的转换
@@ -189,7 +190,9 @@ $$
 $$
 
 请注意，这种情况下的两个变量不是独立的！
-
-
-
 $ \frac{\partial y}{\partial u} du = \frac{dy}{du}  du$
+
+
+
+**参考资料:**
+1. [《PBRT 13.6》](https://www.pbr-book.org/3ed-2018/Monte_Carlo_Integration/2D_Sampling_with_Multidimensional_Transformations#)

@@ -96,9 +96,12 @@ $$
 
 **Cosine-Weighted Hemisphere Sampling**
 参考资料：《PBRT 13.6.3 COSINE-WEIGHTED HEMISPHERE SAMPLING 》
-由散射方程中 BSDF 和入射辐射的乘积加权余弦项， 所以，Mathematically, this means that we would like to sample directions ω from a PDF :
+因为散射方程用余弦项对 BSDF 和入射辐射的乘积进行加权，所以有一种方法可以生成更可能接近半球顶部的方向，其中余弦项与半球底部的余弦项相比具有较大的值. 所以，Mathematically, this means that we would like to sample directions ω from a PDF :
 $$
 p(\omega) \propto \cos \theta \\
+p(\theta,\phi) =\frac{1}{\pi}\cos \theta \sin\theta\\
+$$
+$$
 \begin{align*}
    \int_{\mathcal{H}^2}p(\omega) \text{d}\omega = \int_{\mathcal{H}^2}C\cos\theta \text{d}\omega &=C\int_0^{2\pi}\int_0^\frac{\pi}{2}\cos\theta\sin\theta\ \text{d}\phi\text{d}\theta=C\pi=1\\
    p(\omega)&=\frac{\cos\theta}{\pi}\\
@@ -110,12 +113,12 @@ p(\omega) \propto \cos \theta \\
    &=(\sqrt{\xi_1}\cos(2\pi\xi_2), \sqrt{\xi_1}\sin(2\pi\xi_2), \sqrt{1-\xi_1})\\
 \end{align*}\\
 $$
->另外一种方式：
->* Malley’s method: t if we choose points uniformly from the unit disk and then generate directions by projecting the points on the disk up to the hemisphere above it, the resulting distribution of directions will have a cosine distribution
+>另外一种方式Malley’s method：
+>**Malley’s method**: 如果我们从单位圆盘中均匀地选择点，然后通过将圆盘上的点投影到它上面的半球来生成方向，则得到的方向分布将具有余弦分布
 ![](./Image/Malley_Method.png)
 
 
-###  Path tracing: indirect illumination
+### 间接光的路径追踪 Path tracing: indirect illumination
 $$
 E(\mathbf{p},\omega_o)=\int_{\mathcal{H}^2}f_r(\mathbf{\omega_i},\omega_o)L_{o,i}(tr(\mathbf{p},w_i),-\omega_i)\cos\theta_i\ \text{d}\omega_i \\
 $$
