@@ -164,9 +164,24 @@ r_{\parallel}=\frac{\eta_{\mathrm{t}}\cos\theta_{\mathrm{i}}-\eta_{\mathrm{i}}\c
 r_{\perp}=\frac{\eta_{\mathrm{i}}\cos\theta_{\mathrm{i}}-\eta_{\mathrm{t}}\cos\theta_{\mathrm{t}}}{\eta_{\mathrm{i}}\cos\theta_{\mathrm{i}}+\eta_{\mathrm{t}}\cos\theta_{\mathrm{t}}}\\
 $$
 其中$r_{\parallel}$是平行偏振光的菲涅耳反射率，$r_{\perp}$是垂直偏振光的反射率， $\eta_i$是入射和$\eta_t$透射介质的折射率，$\omega_i$和$\omega_t$是入射和透射方向.
-
 **对于非偏振光，菲涅耳反射率**为:
 $$F_{\mathrm{r}}=\frac{1}{2}(r_{\parallel}^{2}+r_{\perp}^{2})\\$$
+
+
+导体和电介质之间的折射率（a conductor and a dielectric medium）：
+$$
+\begin{align*}
+r_{\perp}&={\frac{a^{2}+b^{2}-2a\cos\theta+\cos^{2}\theta}{a^{2}+b^{2}+2a\cos\theta+\cos^{2}\theta}}\\
+r_{\parallel}&=r_{\perp}\frac{\cos^{2}\theta(a^{2}+b^{2})-2a\cos\theta\sin^{2}\theta+\sin^{4}\theta}{\cos^{2}\theta(a^{2}+b^{2})+2a\cos\theta\sin^{2}\theta+\sin^{4}\theta}\\
+a^{2}\,+\,b^{2} & =\,\sqrt{\left(\eta^{2}\,-\,k^{2}\,-\,\mathrm{sin}^{2}\,\theta\right)^{2}\,+\,4\eta^{2}\,k^{2}}\\
+\end{align*}\\
+$$
+是使用复数除法运算计算$\eta+\mathrm{i}k=\bar{\eta}_{\mathrm{t}}/\bar{\eta}_{\mathrm{i}}$相对折射率。但是，通常$\eta_i$是电介质，因此可以使用正常的实数分割.
+
+**Schlick’s approximation**: 真实世界的菲涅尔公式非常复杂，采用简化方法：($R_0 = F_0$)
+$$
+\begin{align*} R(\theta) &=R_{0}+\left(1-R_{0}\right)(1-\cos \theta)^{5} \\ R_{0} &=\left(\frac{n_{1}-n_{2}}{n_{1}+n_{2}}\right)^{2} \end{align*}\\
+$$
 
 利用菲涅尔方程，我们就可以根据不同的反射率画出$F_{\mathrm{r}}$与$\theta_i$的对应关系图,可以看到：
 * 大部分电介质（Dielectric）都随着视角增加而反射增加 Many real materials: refectance increases with viewing angle
